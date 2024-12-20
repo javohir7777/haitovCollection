@@ -1,0 +1,11 @@
+.container-table {
+  max-width: 1510px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.table-date {
+  margin: 36px 0 8px;
+  display: flex;
+  justify-content: end;
+  padding-right: 8px;
+}

@@ -1,0 +1,16 @@
+.date-input {
+  width: 312px;
+  height: 56px;
+  border: none;
+  padding: 4px 16px;
+  border-radius: 4px 4px 0 0;
+  border: 1px solid var(--navLink-active);
+  border-bottom: 3px solid var(--navLink-active);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.date-input:focus-within {
+  border: 1px solid var(--input-blue);
+  border-bottom: 3px solid var(--input-blue);
+  outline: 1.5px solid var(--input-blue);
+}

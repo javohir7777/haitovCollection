@@ -1,0 +1,33 @@
+body {
+  background-color: var(--headerColor);
+}
+
+nav {
+  width: 368px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: var(--bg-nav);
+  border-radius: 0 50px 50px 0;
+  box-shadow: 8px 0px 12px 0px var(--bg-navShadow);
+  padding: 58px 15.64px 48px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  overflow: scroll;
+}
+.dashboard {
+  margin-left: 368px;
+  /* position: relative;
+  left: 368px; */
+}
+@media (max-width: 1600px) {
+  nav {
+    width: 270px;
+    padding: 28px 15.64px 18px 0;
+  }
+  .dashboard {
+    margin-left: 270px;
+  }
+}

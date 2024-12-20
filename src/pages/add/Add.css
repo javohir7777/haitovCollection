@@ -1,0 +1,244 @@
+.add {
+  padding: 27px 0;
+}
+.add-p {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29.26px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: var(--headerText);
+  padding-bottom: 24.03px;
+}
+
+.addLabelInput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+.add-grid {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(3, auto);
+  gap: 41px;
+}
+.grid-gap {
+  gap: 24px 41px;
+}
+.add-input {
+  margin-top: 8px;
+  width: 315px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  outline: none;
+  border: 1px solid var(--addInput);
+}
+.add-input:focus-within {
+  border: 1.5px solid var(--input-blue);
+}
+.addInput-p {
+  padding: 48.03px 0 24px;
+}
+.add-dizaynGrid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  justify-content: center;
+  gap: 0 41px;
+}
+.add-inputSvg {
+  width: 315px;
+  height: 40px;
+  border: 1px solid var(--addInput);
+  background-color: var(--text-white);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  gap: 10px;
+  margin-top: 8px;
+}
+.add-inputSvg:focus-within {
+  outline: 1.5px solid var(--input-blue);
+}
+.add-inputMateral {
+  width: 100%;
+  height: 35px;
+  border: none;
+  outline: none;
+}
+
+.add-textGrid {
+  display: grid;
+  justify-content: center;
+  margin-top: 14px;
+}
+.add-textlabel {
+  padding-bottom: 8px;
+}
+.add-textArea {
+  width: 961px;
+  height: 162px;
+  border-radius: 10px;
+  border: 1px solid var(--addInput);
+  padding: 10px;
+}
+.add-textArea:focus-within {
+  outline: 1.5px solid var(--input-blue);
+}
+
+.add-checkGrid {
+  margin-top: 46px;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: center;
+  gap: 0 70px;
+}
+.add-textCheck {
+  display: flex;
+  align-items: center;
+  gap: 9.5px;
+}
+.add-checkLabel {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.63px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: var(--headerText);
+}
+.add-check[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  appearance: none;
+  border: 2px solid var(--bg-grey);
+  border-radius: 4px;
+  background-color: var(--text-white);
+  position: relative;
+  display: inline-block;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.add-check[type="checkbox"]:checked {
+  background-color: var(--navLink-active);
+  border: none;
+}
+
+.add-check[type="checkbox"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 8px;
+  width: 7px;
+  height: 16px;
+  border: solid var(--text-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.dateNumber-grid {
+  margin-top: 46px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 75px;
+  justify-content: center;
+  align-items: end;
+}
+.date {
+  display: flex;
+  flex-direction: column;
+}
+.date-label {
+  padding-bottom: 8px;
+}
+/*.date-input {
+  width: 312px;
+  height: 56px;
+  border: none;
+  padding: 4px 16px;
+  border-radius: 4px 4px 0 0;
+  border: 1px solid var(--navLink-active);
+  border-bottom: 3px solid var(--navLink-active);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.date-input:focus-within {
+  border: 1px solid var(--input-blue);
+  border-bottom: 3px solid var(--input-blue);
+  outline: 1.5px solid var(--input-blue);
+} */
+
+.add-price {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-priceInput {
+  margin-top: 8px;
+  width: 255px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  outline: none;
+  border: 1px solid var(--addInput);
+}
+.add-priceInput:focus-within {
+  outline: 1.5px solid var(--input-blue);
+}
+
+.svgDelete {
+  width: 130px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(253, 164, 153, 1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px -1px rgba(12, 12, 13, 0.05);
+  box-shadow: 0px 4px 4px -1px rgba(12, 12, 13, 0.1);
+}
+.svgDelete-span {
+  color: rgba(115, 51, 44, 1);
+  font-weight: 500;
+}
+.svgAdd {
+  background: rgba(183, 241, 185, 1);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 21px 16px 16px;
+  border: none;
+  outline: none;
+  border-radius: 16px;
+}
+.svgAdd-span {
+  color: rgba(45, 78, 48, 1);
+  font-weight: 500;
+}
+
+.add-deleteAdd {
+  margin-top: 73px;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: end;
+  gap: 19px;
+}
+.add-container {
+  /* 1552 - 2 * 295 + 2 * 20 = 1002 */
+  max-width: 1002px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
