@@ -7,12 +7,16 @@ import Layout from "./components/layout/Layout";
 import Done from "./pages/done/Done";
 import Receipts from "./pages/receipts/Receipts";
 import Orders from "./pages/orders/Orders";
+import { ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
+import { ACCESSTOKEN } from "./constants";
 
 function App() {
-  const isAuthLocal = Boolean(localStorage.getItem("isAuth"));
+  const isAuthLocal = Boolean(Cookies.get(ACCESSTOKEN));
   const [isAuth, setIsAuth] = useState(isAuthLocal);
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route
           path="/"

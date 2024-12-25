@@ -1,19 +1,39 @@
-import { useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import "./table.css";
 import { useLocation } from "react-router-dom";
-const Table = () => {
-  const [colorGreen, setColorGreen] = useState(true);
+import { requies } from "../../server";
+const Table = ({ data }) => {
+  const [colorGreen, setColorGreen] = useState(false);
+  const [date, setDate] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const {
+          data: { buyurtmalar },
+        } = await requies.get(`mijozlar/kunlik-buyurtmalar?date=${data}`);
+        setDate(buyurtmalar);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, [data]);
+
   const handleClick = () => {
     setColorGreen(!colorGreen); // Rangni almashtirish
   };
-
+  let dateToSorted;
   let url = useLocation().pathname.split("/")[1];
   let fileExport;
   if (url === "done") {
     fileExport = true;
   } else {
     fileExport = false;
+    dateToSorted = date.toSorted((a, b) => a.id - b.id);
   }
+
   return (
     <main className="main">
       <div className="main-clients">
@@ -200,78 +220,96 @@ const Table = () => {
             {/* <th></th> */}
           </tr>
         </thead>
-        <tbody>
+        {dateToSorted.length === 0 ? (
           <tr>
-            <td>1</td>
-            <td>Abdullabek</td>
-            <td>Abdullaev</td>
-            <td>+998-91-468-43-88</td>
-            <td>
-              <button
-                className={colorGreen ? "td-btn1" : "td-btn1 td-btn1Grey"}
-                onClick={handleClick}
-              >
-                <span
-                  className={
-                    colorGreen
-                      ? "td-greenCircul"
-                      : "td-greenCircul td-greyCircul"
-                  }
-                ></span>
-                {colorGreen ? "Bajarildi" : "Bajarilmadi"}
-              </button>
-            </td>
-            <td>800 ming</td>
-            <td>
-              <button className="editBtn">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clipPath="url(#clip0_123_917)">
-                    <path
-                      d="M7.02856 2.81015H2.65356C2.32204 2.81015 2.0041 2.94184 1.76968 3.17626C1.53526 3.41068 1.40356 3.72863 1.40356 4.06015V12.8101C1.40356 13.1417 1.53526 13.4596 1.76968 13.694C2.0041 13.9285 2.32204 14.0601 2.65356 14.0601H11.4036C11.7351 14.0601 12.053 13.9285 12.2874 13.694C12.5219 13.4596 12.6536 13.1417 12.6536 12.8101V8.43515M11.7161 1.87265C11.9647 1.62401 12.3019 1.48432 12.6536 1.48432C13.0052 1.48432 13.3424 1.62401 13.5911 1.87265C13.8397 2.12129 13.9794 2.45852 13.9794 2.81015C13.9794 3.16178 13.8397 3.49901 13.5911 3.74765L7.65356 9.68515L5.15356 10.3101L5.77856 7.81015L11.7161 1.87265Z"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_123_917">
-                      <rect
-                        width="15"
-                        height="15"
-                        fill="white"
-                        transform="translate(0.153564 0.31015)"
-                      />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </button>
-              <button className="deleteBtn">
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 17 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4.95825 14.8102C4.56867 14.8102 4.23516 14.6796 3.95773 14.4185C3.6803 14.1574 3.54159 13.8435 3.54159 13.4768V4.81015H2.83325V3.47682H6.37492V2.81015H10.6249V3.47682H14.1666V4.81015H13.4583V13.4768C13.4583 13.8435 13.3195 14.1574 13.0421 14.4185C12.7647 14.6796 12.4312 14.8102 12.0416 14.8102H4.95825ZM12.0416 4.81015H4.95825V13.4768H12.0416V4.81015ZM6.37492 12.1435H7.79159V6.14348H6.37492V12.1435ZM9.20825 12.1435H10.6249V6.14348H9.20825V12.1435Z"
-                    fill="white"
-                  />
-                </svg>
-              </button>
-            </td>
+            <td colSpan={7}>Sanani kiriting</td>
           </tr>
-        </tbody>
+        ) : (
+          dateToSorted.map(
+            ({
+              id,
+              ism,
+              familiya,
+              tel_raqam,
+              status,
+              buyurtma_umumiy_summasi,
+            }) => (
+              <tr key={id}>
+                <td>{id}</td>
+                <td>{ism}</td>
+                <td>{familiya}</td>
+                <td>{tel_raqam}</td>
+                <td>
+                  <button
+                    className={colorGreen ? "td-btn1" : "td-btn1 td-btn1Grey"}
+                    onClick={handleClick}
+                  >
+                    <span
+                      className={
+                        colorGreen
+                          ? "td-greenCircul"
+                          : "td-greenCircul td-greyCircul"
+                      }
+                    ></span>
+                    {status ? "Bajarildi" : "Bajarilmadi"}
+                  </button>
+                </td>
+                <td>{buyurtma_umumiy_summasi}</td>
+                <td>
+                  <button className="editBtn">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g clipPath="url(#clip0_123_917)">
+                        <path
+                          d="M7.02856 2.81015H2.65356C2.32204 2.81015 2.0041 2.94184 1.76968 3.17626C1.53526 3.41068 1.40356 3.72863 1.40356 4.06015V12.8101C1.40356 13.1417 1.53526 13.4596 1.76968 13.694C2.0041 13.9285 2.32204 14.0601 2.65356 14.0601H11.4036C11.7351 14.0601 12.053 13.9285 12.2874 13.694C12.5219 13.4596 12.6536 13.1417 12.6536 12.8101V8.43515M11.7161 1.87265C11.9647 1.62401 12.3019 1.48432 12.6536 1.48432C13.0052 1.48432 13.3424 1.62401 13.5911 1.87265C13.8397 2.12129 13.9794 2.45852 13.9794 2.81015C13.9794 3.16178 13.8397 3.49901 13.5911 3.74765L7.65356 9.68515L5.15356 10.3101L5.77856 7.81015L11.7161 1.87265Z"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_123_917">
+                          <rect
+                            width="15"
+                            height="15"
+                            fill="white"
+                            transform="translate(0.153564 0.31015)"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </button>
+                  <button className="deleteBtn">
+                    <svg
+                      width="17"
+                      height="17"
+                      viewBox="0 0 17 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.95825 14.8102C4.56867 14.8102 4.23516 14.6796 3.95773 14.4185C3.6803 14.1574 3.54159 13.8435 3.54159 13.4768V4.81015H2.83325V3.47682H6.37492V2.81015H10.6249V3.47682H14.1666V4.81015H13.4583V13.4768C13.4583 13.8435 13.3195 14.1574 13.0421 14.4185C12.7647 14.6796 12.4312 14.8102 12.0416 14.8102H4.95825ZM12.0416 4.81015H4.95825V13.4768H12.0416V4.81015ZM6.37492 12.1435H7.79159V6.14348H6.37492V12.1435ZM9.20825 12.1435H10.6249V6.14348H9.20825V12.1435Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            )
+          )
+        )}
       </table>
     </main>
   );
+};
+Table.propTypes = {
+  data: PropTypes.string,
 };
 
 export default Table;

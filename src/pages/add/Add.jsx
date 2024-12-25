@@ -1,22 +1,81 @@
-import DateInput from "../../components/date-input/DateInput";
+import { useState } from "react";
 import "./Add.css";
+import { toast } from "react-toastify";
+import { requies } from "../../server";
+import { useNavigate } from "react-router-dom";
 const Add = () => {
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    ism: "",
+    familiya: "",
+    tel_raqam: "",
+    kokrak_aylanasi: 0,
+    bel_aylanasi: 0,
+    uzunligi: 0,
+    yelka_kengligi: 0,
+    yelka_uzunligi: 0,
+    old_orqa_kengligi: 0,
+    bryuk_bel_aylanasi: 0,
+    boyi: 0,
+    son_aylanasi: 0,
+    buksa_aylanasi: 0,
+    oyoq_olchami: 0,
+    gulfik: 0,
+    material_nomi: "",
+    dizayn_nomi: "",
+    tikuvchiga_zoh: 0,
+    buyurtmaning_yakuniy_sanasi: "2024-12-27",
+    buyurtma_umumiy_summasi: 0,
+    oldindan_tolov_summasi: 0,
+  });
+
+  const handleChange = (e) =>
+    setData({ ...data, [e.target.id]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!data.ism || !data.familiya || !data.tel_raqam) {
+      alert("Iltimos formani to'liq to'ldiring");
+      return;
+    }
+    try {
+      const res = await requies.post(`mijozlar/`, data);
+      console.log(res);
+      navigate("/orders");
+    } catch (err) {
+      toast.error(err);
+    }
+  };
   return (
     <div className="add">
       <p className="add-p">Shaxsiy ma{"'"}lumolari</p>
-      <form className="add-form">
+      <form className="add-form" onSubmit={handleSubmit}>
         <div className="add-grid">
           <div className="addLabelInput">
             <label className="add-label" htmlFor="firstName">
               Ism
             </label>
-            <input className="add-input" type="text" id="firstName" />
+            <input
+              className="add-input"
+              type="text"
+              id="ism"
+              name="ism"
+              value={data.ism}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="lastName">
               Familiya
             </label>
-            <input className="add-input" type="text" id="lastName" />
+            <input
+              className="add-input"
+              type="text"
+              id="familiya"
+              name="familiya"
+              value={data.familiya}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="mobile">
@@ -25,8 +84,11 @@ const Add = () => {
             <input
               className="add-input"
               type="text"
-              id="mobile"
+              id="tel_raqam"
               placeholder="+998-"
+              name="tel_raqam"
+              value={data.tel_raqam}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -36,37 +98,79 @@ const Add = () => {
             <label className="add-label" htmlFor="chest">
               Ko{"'"}krak aylanasi
             </label>
-            <input className="add-input" type="text" id="chest" />
+            <input
+              className="add-input"
+              type="number"
+              id="kokrak_aylanasi"
+              name="kokrak_aylanasi"
+              value={data.kokrak_aylanasi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="waist">
               Bel aylanasi
             </label>
-            <input className="add-input" type="text" id="waist" />
+            <input
+              className="add-input"
+              type="number"
+              id="bel_aylanasi"
+              name="bel_aylanasi"
+              value={data.bel_aylanasi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="length">
               Uzunligi
             </label>
-            <input className="add-input" type="text" id="length" />
+            <input
+              className="add-input"
+              type="number"
+              id="uzunligi"
+              name="uzunligi"
+              value={data.uzunligi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="shoulder">
               Yelka kengligi
             </label>
-            <input className="add-input" type="text" id="shoulder" />
+            <input
+              className="add-input"
+              type="number"
+              id="yelka_kengligi"
+              name="yelka_kengligi"
+              value={data.yelka_kengligi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="shoulderLength">
               Yelka uzunligi
             </label>
-            <input className="add-input" type="text" id="shoulderLength" />
+            <input
+              className="add-input"
+              type="number"
+              id="yelka_uzunligi"
+              name="yelka_uzunligi"
+              value={data.yelka_uzunligi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="front-back">
               Old-orqa kengligi
             </label>
-            <input className="add-input" type="text" id="front-back" />
+            <input
+              className="add-input"
+              type="number"
+              id="old_orqa_kengligi"
+              name="old_orqa_kengligi"
+              value={data.old_orqa_kengligi}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <p className="add-p addInput-p">Bryuk / Pastgi qism</p>
@@ -75,37 +179,79 @@ const Add = () => {
             <label className="add-label" htmlFor="waistCircumference">
               Bel aylanasi
             </label>
-            <input className="add-input" type="text" id="waistCircumference" />
+            <input
+              className="add-input"
+              type="number"
+              id="bryuk_bel_aylanasi"
+              name="bryuk_bel_aylanasi"
+              value={data.bryuk_bel_aylanasi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="height">
               Bo{"'"}yi
             </label>
-            <input className="add-input" type="text" id="height" />
+            <input
+              className="add-input"
+              type="number"
+              id="boyi"
+              name="boyi"
+              value={data.boyi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="son">
               Son aylanasi
             </label>
-            <input className="add-input" type="text" id="son" />
+            <input
+              className="add-input"
+              type="number"
+              id="son_aylanasi"
+              name="son_aylanasi"
+              value={data.son_aylanasi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="buksa">
               Buksa aylanasi
             </label>
-            <input className="add-input" type="text" id="buksa" />
+            <input
+              className="add-input"
+              type="number"
+              id="buksa_aylanasi"
+              name="buksa_aylanasi"
+              value={data.buksa_aylanasi}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="foot">
               Oyoq o{"'"}lchami
             </label>
-            <input className="add-input" type="text" id="foot" />
+            <input
+              className="add-input"
+              type="number"
+              id="oyoq_olchami"
+              name="oyoq_olchami"
+              value={data.oyoq_olchami}
+              onChange={handleChange}
+            />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="gulfik">
               Gulfik
             </label>
-            <input className="add-input" type="text" id="gulfik" />
+            <input
+              className="add-input"
+              type="number"
+              id="gulfik"
+              name="gulfik"
+              value={data.gulfik}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <p className="add-p addInput-p">Dizayn va aksessuarlar</p>
@@ -120,7 +266,10 @@ const Add = () => {
                   type="text"
                   placeholder="Material nomi yoki kodini yozing"
                   className="add-inputMateral"
-                  id="material"
+                  id="material_nomi"
+                  name="material_nomi"
+                  value={data.material_nomi}
+                  onChange={handleChange}
                 />
                 <svg
                   width="16"
@@ -145,7 +294,10 @@ const Add = () => {
                   type="text"
                   placeholder="Dizayn turini yozing"
                   className="add-inputMateral"
-                  id="dizayn"
+                  id="dizayn_nomi"
+                  name="dizayn_nomi"
+                  value={data.dizayn_nomi}
+                  onChange={handleChange}
                 />
                 <svg
                   width="16"
@@ -164,11 +316,14 @@ const Add = () => {
           </div>
           <div className="add-textGrid">
             <label htmlFor="textarea-explanation" className="add-textlabel">
-              Tikuvchinign izohi
+              Tikuvchining izohi
             </label>
             <textarea
-              id="textarea-explanation"
               className="add-textArea"
+              id="tikuvchiga_zoh"
+              name="tikuvchiga_zoh"
+              value={data.tikuvchiga_zoh}
+              onChange={handleChange}
             ></textarea>
           </div>
           <div className="add-checkGrid">
@@ -203,20 +358,41 @@ const Add = () => {
                 <label htmlFor="date" className="date-label">
                   Buyurmaning yakuniy sanasi
                 </label>
-                <DateInput />
+                <input
+                  type="date"
+                  className="date-input"
+                  id="buyurtmaning_yakuniy_sanasi"
+                  name="buyurtmaning_yakuniy_sanasi"
+                  value={data.buyurtmaning_yakuniy_sanasi}
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <div className="add-price">
               <label htmlFor="sum" className="add-priceLabel">
                 Buyurtma summasi
               </label>
-              <input id="sum" type="number" className="add-priceInput" />
+              <input
+                type="number"
+                className="add-priceInput"
+                id="buyurtma_umumiy_summasi"
+                name="buyurtma_umumiy_summasi"
+                value={data.buyurtma_umumiy_summasi}
+                onChange={handleChange}
+              />
             </div>
             <div className="add-price">
               <label htmlFor="payment" className="add-priceLabel">
                 Oldindan to{"'"}lov
               </label>
-              <input id="payment" type="number" className="add-priceInput" />
+              <input
+                type="number"
+                className="add-priceInput"
+                id="oldindan_tolov_summasi"
+                name="oldindan_tolov_summasi"
+                value={data.oldindan_tolov_summasi}
+                onChange={handleChange}
+              />
             </div>
           </div>
           <div className="deleteAdd">
@@ -237,7 +413,7 @@ const Add = () => {
 
                 <span className="svgDelete-span">O{"'"}chirish</span>
               </button>
-              <button className="svgAdd">
+              <button className="svgAdd" type="submit">
                 <svg
                   width="24"
                   height="24"

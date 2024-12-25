@@ -1,10 +1,17 @@
 import { Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import "./navbar.css";
 import navLogo from "../../assets/nav/navLogo.svg";
 import lagout from "../../assets/nav/lagout.svg";
+import { ACCESSTOKEN } from "../../constants";
 const Navbar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    Cookies.remove(ACCESSTOKEN);
+    navigate("/login");
+  };
   return (
     <Fragment>
       <div className="nav-menus">
@@ -106,7 +113,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="nav-btn">
-        <a className="nav-link btn-link" href="#">
+        <a className="nav-link btn-link" href="#" onClick={logout}>
           <img src={lagout} alt="lagout?" />
           <span className="link-span">Tizimdan chiqish</span>
         </a>

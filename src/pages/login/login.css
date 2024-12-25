@@ -2,11 +2,12 @@ body {
   background-color: var(--bg-dark);
 }
 .logo {
+  min-height: 100vh;
   background-color: var(--bg-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 124px 0 103px;
+  padding: 40px 0;
 }
 
 .logo--h2 {
