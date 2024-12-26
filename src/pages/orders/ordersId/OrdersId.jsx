@@ -1,72 +1,72 @@
-import { useState } from "react";
-import "./Add.css";
-import { toast } from "react-toastify";
-import { requies } from "../../server";
-// import { useNavigate } from "react-router-dom";
-const Add = () => {
-  // const navigate = useNavigate();
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { requies } from "../../../server";
+
+const OrdersId = () => {
+  let navigate = useNavigate();
+  let { id } = useParams();
   const [data, setData] = useState({
     ism: "",
     familiya: "",
     tel_raqam: "",
-    kokrak_aylanasi: null,
-    bel_aylanasi: null,
-    uzunligi: null,
-    yelka_kengligi: null,
-    yelka_uzunligi: null,
-    old_orqa_kengligi: null,
-    bryuk_bel_aylanasi: null,
-    boyi: null,
-    son_aylanasi: null,
-    buksa_aylanasi: null,
-    oyoq_olchami: null,
-    gulfik: null,
+    kokrak_aylanasi: 0,
+    bel_aylanasi: 0,
+    uzunligi: 0,
+    yelka_kengligi: 0,
+    yelka_uzunligi: 0,
+    old_orqa_kengligi: 0,
+    bryuk_bel_aylanasi: 0,
+    boyi: 0,
+    son_aylanasi: 0,
+    buksa_aylanasi: 0,
+    oyoq_olchami: 0,
+    gulfik: 0,
     material_nomi: "",
     dizayn_nomi: "",
     tikuvchiga_zoh: "",
     buyurtmaning_yakuniy_sanasi: "2024-12-27",
-    buyurtma_umumiy_summasi: null,
-    oldindan_tolov_summasi: null,
+    buyurtma_umumiy_summasi: 0,
+    oldindan_tolov_summasi: 0,
   });
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const { data } = await requies.get(`mijozlar/${id}/`);
+
+        setData({
+          ...data,
+          buyurtmaning_yakuniy_sanasi: formatDate(
+            data.buyurtmaning_yakuniy_sanasi
+          ),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, [id]);
 
   const handleChange = (e) =>
     setData({ ...data, [e.target.id]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!data.ism || !data.familiya || !data.tel_raqam) {
-      alert("Iltimos formani to'liq to'ldiring");
-      return;
-    }
     try {
-      const res = await requies.post(`mijozlar/`, data);
+      const res = await requies.put(`mijozlar/${id}/update/`, data);
       console.log(res);
-      setData({
-        ism: "",
-        familiya: "",
-        tel_raqam: "",
-        kokrak_aylanasi: null,
-        bel_aylanasi: null,
-        uzunligi: null,
-        yelka_kengligi: null,
-        yelka_uzunligi: null,
-        old_orqa_kengligi: null,
-        bryuk_bel_aylanasi: null,
-        boyi: null,
-        son_aylanasi: null,
-        buksa_aylanasi: null,
-        oyoq_olchami: null,
-        gulfik: null,
-        material_nomi: "",
-        dizayn_nomi: "",
-        tikuvchiga_zoh: "",
-        buyurtmaning_yakuniy_sanasi: "2024-12-27",
-        buyurtma_umumiy_summasi: null,
-        oldindan_tolov_summasi: null,
-      });
-      // navigate("/orders");
+
+      navigate("/orders");
     } catch (err) {
-      toast.error(err);
+      console.log(err);
     }
   };
   return (
@@ -460,4 +460,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default OrdersId;
