@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Cookies from "js-cookie";
 import { ACCESSTOKEN } from "./constants";
 import OrdersId from "./pages/orders/ordersId/OrdersId";
+import DoneId from "./pages/done/doneId/DoneId";
 
 function App() {
   const isAuthLocal = Boolean(Cookies.get(ACCESSTOKEN));
@@ -27,6 +28,7 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path={`/orders/:id`} element={<OrdersId />} />
           <Route path="/done" element={<Done />} />
+          <Route path="/done/:id" element={<DoneId />} />
           <Route path="/receipts" element={<Receipts />} />
         </Route>
         <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />

@@ -30,7 +30,7 @@ const Orders = () => {
     getData();
   }, [data]);
 
-  let dateToSorted = date.toSorted((a, b) => a.id - b.id);
+  // let dateToSorted = date.toSorted((a, b) => a.id - b.id);
 
   const deleteId = async (id) => {
     const conDelete = confirm("O'chirishni xoxlaysizmi?");
@@ -52,7 +52,7 @@ const Orders = () => {
     }
   };
 
-  const filteredData = dateToSorted.filter(
+  const filteredData = date.filter(
     ({ ism, familiya, tel_raqam }) =>
       ism.toLowerCase().includes(searchTerm.toLowerCase()) ||
       familiya.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -238,9 +238,9 @@ const Orders = () => {
               </tr>
             ) : (
               filteredData.map(
-                ({ id, ism, familiya, tel_raqam, status, qoldiq_summa }) => (
+                ({ id, ism, familiya, tel_raqam, status, qoldiq_summa }, i) => (
                   <tr key={id}>
-                    <td>{id}</td>
+                    <td>{i + 1}</td>
                     <td>{ism}</td>
                     <td>{familiya}</td>
                     <td>{tel_raqam}</td>

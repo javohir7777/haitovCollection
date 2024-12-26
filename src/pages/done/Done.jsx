@@ -1,11 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./Done.css";
+import { requies } from "../../server";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const Done = () => {
-  const [colorGreen, setColorGreen] = useState(false);
-  const handleClick = () => {
-    setColorGreen(!colorGreen); // Rangni almashtirish
+  const [date, setDate] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const {
+        data: { data },
+      } = await requies.get("mijozlar/bajarilganlar");
+      setDate(data);
+    } catch (error) {
+      toast.error(error);
+    }
   };
+
+  const deleteId = async (id) => {
+    const conDelete = confirm("O'chirishni xoxlaysizmi?");
+    conDelete && (await requies.delete(`mijozlar/${id}/delete/`));
+    await getData();
+  };
+
+  const filteredData = date.filter(
+    ({ ism, familiya, tel_raqam }) =>
+      ism.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      familiya.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tel_raqam.includes(searchTerm)
+  );
   return (
     <div className="container-table" style={{ paddingTop: "42px" }}>
       <main className="main">
@@ -67,9 +96,11 @@ const Done = () => {
                 type="text"
                 className="main-search"
                 placeholder="Qidirish"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="main-btn">
+            <Link to="/" className="main-btn">
               <svg
                 className="main-btnSvg"
                 width="20"
@@ -87,7 +118,7 @@ const Done = () => {
                 />
               </svg>
               <span className="main-btnSpan">Mijoz qo’shish</span>
-            </button>
+            </Link>
           </div>
         </div>
         <table>
@@ -197,75 +228,83 @@ const Done = () => {
               {/* <th></th> */}
             </tr>
           </thead>
-          <tbody>
+          {filteredData.length === 0 ? (
             <tr>
-              <td>id</td>
-              <td>ism</td>
-              <td>familiya</td>
-              <td>tel_raqam</td>
-              <td>
-                <button
-                  className={colorGreen ? "td-btn1" : "td-btn1 td-btn1Grey"}
-                  onClick={handleClick}
-                >
-                  <span
-                    className={
-                      colorGreen
-                        ? "td-greenCircul"
-                        : "td-greenCircul td-greyCircul"
-                    }
-                  ></span>
-                  {colorGreen ? "Bajarildi" : "Bajarilmadi"}
-                </button>
-              </td>
-              <td>buyurtma_umumiy_summasi</td>
-              <td>
-                <button className="editBtn">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_123_917)">
-                      <path
-                        d="M7.02856 2.81015H2.65356C2.32204 2.81015 2.0041 2.94184 1.76968 3.17626C1.53526 3.41068 1.40356 3.72863 1.40356 4.06015V12.8101C1.40356 13.1417 1.53526 13.4596 1.76968 13.694C2.0041 13.9285 2.32204 14.0601 2.65356 14.0601H11.4036C11.7351 14.0601 12.053 13.9285 12.2874 13.694C12.5219 13.4596 12.6536 13.1417 12.6536 12.8101V8.43515M11.7161 1.87265C11.9647 1.62401 12.3019 1.48432 12.6536 1.48432C13.0052 1.48432 13.3424 1.62401 13.5911 1.87265C13.8397 2.12129 13.9794 2.45852 13.9794 2.81015C13.9794 3.16178 13.8397 3.49901 13.5911 3.74765L7.65356 9.68515L5.15356 10.3101L5.77856 7.81015L11.7161 1.87265Z"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_123_917">
-                        <rect
-                          width="15"
-                          height="15"
-                          fill="white"
-                          transform="translate(0.153564 0.31015)"
-                        />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </button>
-                <button className="deleteBtn">
-                  <svg
-                    width="17"
-                    height="17"
-                    viewBox="0 0 17 17"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.95825 14.8102C4.56867 14.8102 4.23516 14.6796 3.95773 14.4185C3.6803 14.1574 3.54159 13.8435 3.54159 13.4768V4.81015H2.83325V3.47682H6.37492V2.81015H10.6249V3.47682H14.1666V4.81015H13.4583V13.4768C13.4583 13.8435 13.3195 14.1574 13.0421 14.4185C12.7647 14.6796 12.4312 14.8102 12.0416 14.8102H4.95825ZM12.0416 4.81015H4.95825V13.4768H12.0416V4.81015ZM6.37492 12.1435H7.79159V6.14348H6.37492V12.1435ZM9.20825 12.1435H10.6249V6.14348H9.20825V12.1435Z"
-                      fill="white"
-                    />
-                  </svg>
-                </button>
-              </td>
+              <td colSpan={7}>Foydalanuvchi mavjud emas!</td>
             </tr>
-          </tbody>
+          ) : (
+            filteredData.map(
+              ({ id, ism, familiya, tel_raqam, status, qoldiq_summa }, i) => (
+                <tr key={id}>
+                  <td>{i + 1}</td>
+                  <td>{ism}</td>
+                  <td>{familiya}</td>
+                  <td>{tel_raqam}</td>
+                  <td>
+                    <button
+                      className={status ? "td-btn1" : "td-btn1 td-btn1Grey"}
+                      // onClick={() => toggleStatus(id, status)}
+                    >
+                      <span
+                        className={
+                          status
+                            ? "td-greenCircul"
+                            : "td-greenCircul td-greyCircul"
+                        }
+                      ></span>
+                      {status ? "Bajarildi" : "Bajarilmadi"}
+                    </button>
+                  </td>
+                  <td>{qoldiq_summa}</td>
+                  <td>
+                    <Link to={`/done/${id}`} className="editBtn">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_123_917)">
+                          <path
+                            d="M7.02856 2.81015H2.65356C2.32204 2.81015 2.0041 2.94184 1.76968 3.17626C1.53526 3.41068 1.40356 3.72863 1.40356 4.06015V12.8101C1.40356 13.1417 1.53526 13.4596 1.76968 13.694C2.0041 13.9285 2.32204 14.0601 2.65356 14.0601H11.4036C11.7351 14.0601 12.053 13.9285 12.2874 13.694C12.5219 13.4596 12.6536 13.1417 12.6536 12.8101V8.43515M11.7161 1.87265C11.9647 1.62401 12.3019 1.48432 12.6536 1.48432C13.0052 1.48432 13.3424 1.62401 13.5911 1.87265C13.8397 2.12129 13.9794 2.45852 13.9794 2.81015C13.9794 3.16178 13.8397 3.49901 13.5911 3.74765L7.65356 9.68515L5.15356 10.3101L5.77856 7.81015L11.7161 1.87265Z"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_123_917">
+                            <rect
+                              width="15"
+                              height="15"
+                              fill="white"
+                              transform="translate(0.153564 0.31015)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </Link>
+                    <button className="deleteBtn" onClick={() => deleteId(id)}>
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.95825 14.8102C4.56867 14.8102 4.23516 14.6796 3.95773 14.4185C3.6803 14.1574 3.54159 13.8435 3.54159 13.4768V4.81015H2.83325V3.47682H6.37492V2.81015H10.6249V3.47682H14.1666V4.81015H13.4583V13.4768C13.4583 13.8435 13.3195 14.1574 13.0421 14.4185C12.7647 14.6796 12.4312 14.8102 12.0416 14.8102H4.95825ZM12.0416 4.81015H4.95825V13.4768H12.0416V4.81015ZM6.37492 12.1435H7.79159V6.14348H6.37492V12.1435ZM9.20825 12.1435H10.6249V6.14348H9.20825V12.1435Z"
+                          fill="white"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              )
+            )
+          )}
         </table>
       </main>
     </div>
