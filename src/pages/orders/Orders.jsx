@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Orders = () => {
   const [data, setData] = useState("");
   const [date, setDate] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleDataChange = (e) => {
     const selectedData = e.target.value;
@@ -51,6 +52,13 @@ const Orders = () => {
     }
   };
 
+  const filteredData = dateToSorted.filter(
+    ({ ism, familiya, tel_raqam }) =>
+      ism.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      familiya.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tel_raqam.includes(searchTerm)
+  );
+
   return (
     <div className="container-table">
       <div className="table-date">
@@ -91,6 +99,8 @@ const Orders = () => {
                 type="text"
                 className="main-search"
                 placeholder="Qidirish"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Link to="/" className="main-btn">
@@ -222,12 +232,12 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {dateToSorted.length === 0 ? (
+            {filteredData.length === 0 ? (
               <tr>
                 <td colSpan={7}>Sanani kiriting</td>
               </tr>
             ) : (
-              dateToSorted.map(
+              filteredData.map(
                 ({ id, ism, familiya, tel_raqam, status, qoldiq_summa }) => (
                   <tr key={id}>
                     <td>{id}</td>
