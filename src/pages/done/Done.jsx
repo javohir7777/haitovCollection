@@ -16,7 +16,7 @@ const Done = () => {
     try {
       const {
         data: { data },
-      } = await requies.get("mijozlar/bajarilganlar");
+      } = await requies.get("mijozlar/bajarilganlar/");
       setDate(data);
     } catch (error) {
       toast.error(error);

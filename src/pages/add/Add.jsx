@@ -40,7 +40,8 @@ const Add = () => {
     }
     try {
       const res = await requies.post(`mijozlar/`, data);
-      console.log(res);
+      console.log(res.status);
+
       setData({
         ism: "",
         familiya: "",
@@ -64,6 +65,7 @@ const Add = () => {
         buyurtma_umumiy_summasi: 0,
         oldindan_tolov_summasi: 0,
       });
+
       // navigate("/orders");
     } catch (err) {
       toast.error(err);

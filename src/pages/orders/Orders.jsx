@@ -26,6 +26,8 @@ const Orders = () => {
     }
   };
 
+  console.log(data);
+
   useEffect(() => {
     getData();
   }, [data]);
