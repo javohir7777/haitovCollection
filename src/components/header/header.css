@@ -4,6 +4,7 @@ header {
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
   padding: 62px 0 61px;
   background-color: var(--headerColor);
+  z-index: 1;
 }
 .header-text {
   display: flex;

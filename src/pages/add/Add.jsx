@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { requies } from "../../server";
 import "./Add.css";
+
 // import { useNavigate } from "react-router-dom";
 const Add = () => {
   // const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Add = () => {
     material_nomi: "",
     dizayn_nomi: "",
     tikuvchiga_zoh: "",
-    buyurtmaning_yakuniy_sanasi: "2024-12-27",
+    buyurtmaning_yakuniy_sanasi: "2025-01-07",
     buyurtma_umumiy_summasi: 0,
     oldindan_tolov_summasi: 0,
   });
@@ -40,7 +41,7 @@ const Add = () => {
     }
     try {
       const res = await requies.post(`mijozlar/`, data);
-      console.log(res.status);
+      console.log(res);
 
       setData({
         ism: "",
@@ -61,16 +62,41 @@ const Add = () => {
         material_nomi: "",
         dizayn_nomi: "",
         tikuvchiga_zoh: "",
-        buyurtmaning_yakuniy_sanasi: "2024-12-27",
+        buyurtmaning_yakuniy_sanasi: "2025-01-07",
         buyurtma_umumiy_summasi: 0,
         oldindan_tolov_summasi: 0,
       });
-
-      // navigate("/orders");
     } catch (err) {
       toast.error(err);
     }
   };
+
+  // const resetData = () => {
+  //   setData({
+  //     ism: "",
+  //     familiya: "",
+  //     tel_raqam: "",
+  //     kokrak_aylanasi: 0,
+  //     bel_aylanasi: 0,
+  //     uzunligi: 0,
+  //     yelka_kengligi: 0,
+  //     yelka_uzunligi: 0,
+  //     old_orqa_kengligi: 0,
+  //     bryuk_bel_aylanasi: 0,
+  //     boyi: 0,
+  //     son_aylanasi: 0,
+  //     buksa_aylanasi: 0,
+  //     oyoq_olchami: 0,
+  //     gulfik: 0,
+  //     material_nomi: "",
+  //     dizayn_nomi: "",
+  //     tikuvchiga_zoh: "",
+  //     buyurtmaning_yakuniy_sanasi: "2025-01-07",
+  //     buyurtma_umumiy_summasi: 0,
+  //     oldindan_tolov_summasi: 0,
+  //   });
+  // };
+
   return (
     <div className="add">
       <p className="add-p">Shaxsiy ma{"'"}lumolari</p>
@@ -421,7 +447,10 @@ const Add = () => {
             </div>
           </div>
           <div className="deleteAdd">
-            <div className="add-deleteAdd">
+            <div
+              // onClick={resetData}
+              className="add-deleteAdd"
+            >
               <button className="svgDelete">
                 <svg
                   width="20"
