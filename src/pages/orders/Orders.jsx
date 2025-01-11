@@ -1,19 +1,24 @@
 import { useEffect, useState } from "react";
-// import DateInput from "../../components/date-input/DateInput";
+import { Link } from "react-router-dom";
+import { requies } from "../../server";
 
 import "./order.css";
-import { requies } from "../../server";
-import { Link } from "react-router-dom";
 
 const Orders = () => {
-  const [data, setData] = useState("");
   const [date, setDate] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState(getDataIsoString());
 
   const handleDataChange = (e) => {
     const selectedData = e.target.value;
     setData(selectedData);
   };
+
+  function getDataIsoString() {
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
+    return formattedDate;
+  }
 
   const getData = async () => {
     try {
@@ -31,8 +36,6 @@ const Orders = () => {
   useEffect(() => {
     getData();
   }, [data]);
-
-  // let dateToSorted = date.toSorted((a, b) => a.id - b.id);
 
   const deleteId = async (id) => {
     const conDelete = confirm("O'chirishni xoxlaysizmi?");
@@ -64,7 +67,6 @@ const Orders = () => {
   return (
     <div className="container-table">
       <div className="table-date">
-        {/* <DateInput /> */}
         <input
           type="date"
           id="date"

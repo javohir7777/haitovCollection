@@ -3,9 +3,7 @@ import { toast } from "react-toastify";
 import { requies } from "../../server";
 import "./Add.css";
 
-// import { useNavigate } from "react-router-dom";
 const Add = () => {
-  // const navigate = useNavigate();
   const [data, setData] = useState({
     ism: "",
     familiya: "",
@@ -25,16 +23,24 @@ const Add = () => {
     material_nomi: "",
     dizayn_nomi: "",
     tikuvchiga_zoh: "",
-    buyurtmaning_yakuniy_sanasi: "2025-01-07",
+    buyurtmaning_yakuniy_sanasi: getDataIsoString(),
     buyurtma_umumiy_summasi: 0,
     oldindan_tolov_summasi: 0,
   });
+
+  function getDataIsoString() {
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
+    return formattedDate;
+  }
+  console.log(getDataIsoString());
 
   const handleChange = (e) =>
     setData({ ...data, [e.target.id]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!data.ism || !data.familiya || !data.tel_raqam) {
       alert("Iltimos formani to'liq to'ldiring");
       return;
@@ -62,40 +68,16 @@ const Add = () => {
         material_nomi: "",
         dizayn_nomi: "",
         tikuvchiga_zoh: "",
-        buyurtmaning_yakuniy_sanasi: "2025-01-07",
+        buyurtmaning_yakuniy_sanasi: getDataIsoString(),
         buyurtma_umumiy_summasi: 0,
         oldindan_tolov_summasi: 0,
       });
+
     } catch (err) {
       toast.error(err);
     }
   };
-
-  // const resetData = () => {
-  //   setData({
-  //     ism: "",
-  //     familiya: "",
-  //     tel_raqam: "",
-  //     kokrak_aylanasi: 0,
-  //     bel_aylanasi: 0,
-  //     uzunligi: 0,
-  //     yelka_kengligi: 0,
-  //     yelka_uzunligi: 0,
-  //     old_orqa_kengligi: 0,
-  //     bryuk_bel_aylanasi: 0,
-  //     boyi: 0,
-  //     son_aylanasi: 0,
-  //     buksa_aylanasi: 0,
-  //     oyoq_olchami: 0,
-  //     gulfik: 0,
-  //     material_nomi: "",
-  //     dizayn_nomi: "",
-  //     tikuvchiga_zoh: "",
-  //     buyurtmaning_yakuniy_sanasi: "2025-01-07",
-  //     buyurtma_umumiy_summasi: 0,
-  //     oldindan_tolov_summasi: 0,
-  //   });
-  // };
+  
 
   return (
     <div className="add">
