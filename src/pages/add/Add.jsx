@@ -26,6 +26,11 @@ const Add = () => {
     buyurtmaning_yakuniy_sanasi: getDataIsoString(),
     buyurtma_umumiy_summasi: 0,
     oldindan_tolov_summasi: 0,
+    status: false,
+    aksessuar: false,
+    tufli: false,
+    galstuk: false,
+    babochka: false,
   });
 
   function getDataIsoString() {
@@ -35,8 +40,10 @@ const Add = () => {
   }
   console.log(getDataIsoString());
 
-  const handleChange = (e) =>
-    setData({ ...data, [e.target.id]: e.target.value });
+  const handleChange = (e) => {
+    const { id, type, checked, value } = e.target;
+    setData({ ...data, [id]: type === "checkbox" ? checked : value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,13 +78,16 @@ const Add = () => {
         buyurtmaning_yakuniy_sanasi: getDataIsoString(),
         buyurtma_umumiy_summasi: 0,
         oldindan_tolov_summasi: 0,
+        status: false,
+        aksessuar: false,
+        tufli: false,
+        galstuk: false,
+        babochka: false,
       });
-
     } catch (err) {
       toast.error(err);
     }
   };
-  
 
   return (
     <div className="add">
@@ -122,6 +132,7 @@ const Add = () => {
               name="tel_raqam"
               value={data.tel_raqam}
               onChange={handleChange}
+              // value={`+998${data.tel_raqam}`}
             />
           </div>
         </div>
@@ -361,25 +372,49 @@ const Add = () => {
           </div>
           <div className="add-checkGrid">
             <div className="add-textCheck">
-              <input type="checkbox" id="aksessuar" className="add-check" />
+              <input
+                type="checkbox"
+                id="aksessuar"
+                className="add-check"
+                checked={data.aksessuar}
+                onChange={handleChange}
+              />
               <label htmlFor="aksessuar" className="add-checkLabel">
                 Aksessuar
               </label>
             </div>
             <div className="add-textCheck">
-              <input type="checkbox" id="tufli" className="add-check" />
+              <input
+                type="checkbox"
+                id="tufli"
+                className="add-check"
+                checked={data.tufli}
+                onChange={handleChange}
+              />
               <label htmlFor="tufli" className="add-checkLabel">
                 Tufli
               </label>
             </div>
             <div className="add-textCheck">
-              <input type="checkbox" id="galstuk" className="add-check" />
+              <input
+                type="checkbox"
+                id="galstuk"
+                className="add-check"
+                checked={data.galstuk}
+                onChange={handleChange}
+              />
               <label htmlFor="galstuk" className="add-checkLabel">
                 Galstuk
               </label>
             </div>
             <div className="add-textCheck">
-              <input type="checkbox" id="babochka" className="add-check" />
+              <input
+                type="checkbox"
+                id="babochka"
+                className="add-check"
+                checked={data.babochka}
+                onChange={handleChange}
+              />
               <label htmlFor="babochka" className="add-checkLabel">
                 Babochka
               </label>
