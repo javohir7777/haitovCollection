@@ -9,3 +9,6 @@
   justify-content: end;
   padding-right: 8px;
 }
+.tr-red {
+  background-color: rgba(255, 182, 182, 1);
+}

@@ -8,6 +8,7 @@ const Orders = () => {
   const [date, setDate] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState(getDataIsoString());
+  const [buyurtmalarSoni, setBuyurtmalarSoni] = useState();
 
   const handleDataChange = (e) => {
     const selectedData = e.target.value;
@@ -26,7 +27,7 @@ const Orders = () => {
         data: { buyurtmalar, buyurtmalar_soni },
       } = await requies.get(`mijozlar/kunlik-buyurtmalar?date=${data}`);
       setDate(buyurtmalar);
-      console.log(buyurtmalar_soni);
+      setBuyurtmalarSoni(buyurtmalar_soni);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +63,7 @@ const Orders = () => {
       familiya.toLowerCase().includes(searchTerm.toLowerCase()) ||
       tel_raqam.includes(searchTerm)
   );
-
+  console.log(buyurtmalarSoni);
   return (
     <div className="container-table">
       <div className="table-date">
@@ -242,7 +243,12 @@ const Orders = () => {
             ) : (
               filteredData.map(
                 ({ id, ism, familiya, tel_raqam, status, qoldiq_summa }, i) => (
-                  <tr key={id}>
+                  <tr
+                    key={id}
+                    className={
+                      buyurtmalarSoni >= 9 && i + 1 >= 9 ? "tr-red" : ""
+                    }
+                  >
                     <td>{i + 1}</td>
                     <td>{ism}</td>
                     <td>{familiya}</td>
