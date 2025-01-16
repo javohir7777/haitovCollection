@@ -8,25 +8,25 @@ const OrdersId = () => {
   const [data, setData] = useState({
     ism: "",
     familiya: "",
-    tel_raqam: "",
-    kokrak_aylanasi: 0,
-    bel_aylanasi: 0,
-    uzunligi: 0,
-    yelka_kengligi: 0,
-    yelka_uzunligi: 0,
-    old_orqa_kengligi: 0,
-    bryuk_bel_aylanasi: 0,
-    boyi: 0,
-    son_aylanasi: 0,
-    buksa_aylanasi: 0,
-    oyoq_olchami: 0,
-    gulfik: 0,
+    tel_raqam: "+998",
+    kokrak_aylanasi: "",
+    bel_aylanasi: "",
+    uzunligi: "",
+    yelka_kengligi: "",
+    yelka_uzunligi: "",
+    old_orqa_kengligi: "",
+    bryuk_bel_aylanasi: "",
+    boyi: "",
+    son_aylanasi: "",
+    buksa_aylanasi: "",
+    oyoq_olchami: "",
+    gulfik: "",
     material_nomi: "",
     dizayn_nomi: "",
     tikuvchiga_zoh: "",
     buyurtmaning_yakuniy_sanasi: "2024-12-27",
-    buyurtma_umumiy_summasi: 0,
-    oldindan_tolov_summasi: 0,
+    buyurtma_umumiy_summasi: "",
+    oldindan_tolov_summasi: "",
     status: false,
     aksessuar: false,
     tufli: false,
@@ -62,7 +62,23 @@ const OrdersId = () => {
 
   const handleChange = (e) => {
     const { id, type, checked, value } = e.target;
-    setData({ ...data, [id]: type === "checkbox" ? checked : value });
+    // setData({ ...data, [id]: type === "checkbox" ? checked : value });
+    setData((prevData) => {
+      if (id === "tel_raqam") {
+        const sanitizedValue = value
+          .replace(/\+998/, "")
+          .replace(/[^0-9]/g, "");
+        return {
+          ...prevData,
+          [id]: `+998${sanitizedValue}`,
+        };
+      } else {
+        return {
+          ...prevData,
+          [id]: type === "checkbox" ? checked : value,
+        };
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
