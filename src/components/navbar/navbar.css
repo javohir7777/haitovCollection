@@ -32,15 +32,12 @@
   text-decoration-skip-ink: none;
   color: var(--text-white);
 }
-/* .nav-link .icon-path {
-  transition: fill 0.3s ease;
-} */
 
 .active {
   background-color: var(--navLink-active);
 }
 .active .icon-path {
-  fill: var(--bg-dark); /* Hoverda qizil rang */
+  fill: var(--bg-dark);
 }
 .active .link-span {
   color: var(--navLinkActive-text);
@@ -59,5 +56,26 @@
   }
   .nav-link {
     margin-bottom: 12px;
+  }
+}
+@media (max-width: 1312px) {
+  .nav-link {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    border-radius: 0;
+  }
+  .link-span {
+    text-align: center;
+  }
+  /* .nav-link svg {
+    width: 100%;
+  } */
+}
+@media (max-width: 991px) {
+  .link-span {
+    padding-top: 10px;
+    line-height: 18.13px;
   }
 }

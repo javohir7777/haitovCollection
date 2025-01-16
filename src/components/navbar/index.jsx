@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { ACCESSTOKEN } from "../../constants";
 
-import "./navbar.css";
 import navLogo from "../../assets/nav/navLogo.svg";
 import lagout from "../../assets/nav/lagout.svg";
-import { ACCESSTOKEN } from "../../constants";
+import "./navbar.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const logout = () => {

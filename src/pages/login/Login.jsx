@@ -56,7 +56,7 @@ const Login = ({ setIsAuth }) => {
   return (
     <div className="logo">
       <div className="logo-flex">
-        <img src={brandLogo} alt="logo?" />
+        <img className="logo-brand__img" src={brandLogo} alt="logo?" />
         <h2 className="logo--h2">Kirish</h2>
         <form
           className="form-login"
