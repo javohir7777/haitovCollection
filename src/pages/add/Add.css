@@ -258,3 +258,48 @@
   border-bottom: 3px solid var(--input-blue);
   outline: 1.5px solid var(--input-blue);
 }
+@media (max-width: 1350px) {
+  .add-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .add-textArea {
+    width: 768px;
+  }
+  .dateNumber-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+@media (max-width: 1100px) {
+  .add-textArea {
+    width: 576px;
+  }
+}
+@media (max-width: 841px) {
+  .add {
+    padding: 0 20px;
+  }
+  .add-dizaynGrid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 576px) {
+  .add-textGrid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .add-checkGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .add-textCheck {
+    flex-direction: column;
+  }
+  /* .add-textArea {
+    width: 100%;
+  } */
+}

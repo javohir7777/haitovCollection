@@ -17,6 +17,9 @@ nav {
   flex-direction: column;
   overflow: scroll;
 }
+.nav-2 {
+  display: none;
+}
 .dashboard {
   margin-left: 368px;
   /* position: relative;
@@ -57,3 +60,34 @@ nav {
     margin-left: 0;
   }
 } */
+@media (max-width: 768px) {
+  nav {
+    display: none;
+  }
+  .dashboard {
+    margin-left: 0;
+  }
+  .nav-2 {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    background-color: var(--bg-nav);
+    padding: 20px 30px 0;
+    z-index: 1;
+  }
+}
+@media (max-width: 611px) {
+  .nav-2 {
+    padding: 20px 20px 0;
+  }
+}
+@media (max-width: 500px) {
+  .nav-2 {
+    padding: 20px 20px 10px;
+  }
+}
