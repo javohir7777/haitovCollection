@@ -544,7 +544,7 @@ const Add = () => {
                   />
                 </svg>
 
-                <span className="svgAdd-span">Buyurtmani saqlash</span>
+                <span className="svgAdd-span">Saqlash</span>
               </button>
             </div>
           </div>
