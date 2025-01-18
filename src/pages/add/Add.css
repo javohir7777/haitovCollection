@@ -298,4 +298,9 @@
   /* .add-textArea {
     width: 100%;
   } */
+  .add-dizaynGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 }
