@@ -279,7 +279,7 @@
 }
 @media (max-width: 841px) {
   .add {
-    padding: 0 20px;
+    padding: 40px 20px 170px;
   }
   .add-dizaynGrid {
     display: flex;
