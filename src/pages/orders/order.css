@@ -12,3 +12,8 @@
 .tr-red {
   background-color: rgba(255, 182, 182, 1);
 }
+@media (max-width: 768px) {
+  .container-table {
+    padding-bottom: 150px;
+  }
+}

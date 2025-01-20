@@ -91,6 +91,9 @@
   outline: none;
 }
 
+.table-container {
+  overflow-x: auto;
+}
 table {
   width: 100%;
 }
@@ -241,4 +244,46 @@ td:nth-child(7) {
 }
 .sanaKiriting {
   margin: 0 auto;
+}
+@media (max-width: 1450px) {
+  /* table {
+    display: none;
+  } */
+  .main-clients {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media (max-width: 602px) {
+  .main-h2 {
+    text-align: center;
+  }
+}
+@media (max-width: 866px) {
+  .main-inputsBtn {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 545px) {
+  .main-client {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media (max-width: 450px) {
+  .header-text {
+    font-size: 30px;
+    line-height: 30.76px;
+  }
+}
+@media (max-width: 3600px) {
+  .header-text {
+    font-size: 25px;
+    line-height: 25.76px;
+  }
+  .input-svgInput {
+    width: 250px;
+  }
 }

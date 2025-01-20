@@ -8,7 +8,7 @@ const Header = () => {
   } else if (url === "orders") {
     urlText = `Buyurtmalar`;
   } else if (url === "done") {
-    urlText = `Bajarilgan buyurtmalar ro’yxati`;
+    urlText = `Bajarilgan buyurtmalar`;
   } else if (url === "receipts") {
     urlText = `Receipt`;
   }
