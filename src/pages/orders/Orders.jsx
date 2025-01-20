@@ -8,7 +8,6 @@ const Orders = () => {
   const [date, setDate] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState(getDataIsoString());
-  const [sana, setSana] = useState();
   const [buyurtmalarSoni, setBuyurtmalarSoni] = useState();
 
   const handleDataChange = (e) => {
@@ -25,11 +24,11 @@ const Orders = () => {
   const getData = async () => {
     try {
       const {
-        data: { buyurtmalar, buyurtmalarSoni, sana },
+        data: { buyurtmalar, buyurtmalarSoni },
       } = await requies.get(`mijozlar/kunlik-buyurtmalar?date=${data}`);
       setDate(buyurtmalar);
       setBuyurtmalarSoni(buyurtmalarSoni);
-      setSana(sana);
+      // setSana(sana);
     } catch (error) {
       console.log(error);
     }
@@ -81,11 +80,7 @@ const Orders = () => {
         <div className="main-clients">
           <div className="main-client">
             <h2 className="main-h2">Mijozlar ro’yxati</h2>
-            <p className="main-span">
-              {filteredData.length === 0
-                ? "Sana kiriting"
-                : sana + " kunida tayyor bo’ladiganlar"}
-            </p>
+            <p className="main-span">{data + " kunida tayyor bo’ladiganlar"}</p>
           </div>
           <div className="main-inputsBtn">
             <div className="input-svgInput">
@@ -245,7 +240,7 @@ const Orders = () => {
             <tbody>
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={7}>Sanani kiriting</td>
+                  <td colSpan={7}>Ma{"'"}lumot topilmadi</td>
                 </tr>
               ) : (
                 filteredData.map(
