@@ -15,7 +15,7 @@ nav {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  overflow: scroll;
+  overflow: auto;
 }
 .nav-2 {
   display: none;
