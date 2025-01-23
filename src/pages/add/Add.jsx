@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { requies } from "../../server";
-import "./Add.css";
 import { useNavigate } from "react-router-dom";
+import "./Add.css";
 
 const Add = () => {
   let navigate = useNavigate();
@@ -33,6 +33,7 @@ const Add = () => {
     tufli: false,
     galstuk: false,
     babochka: false,
+    // material_rasmi: null,
   });
 
   function getDataIsoString() {
@@ -40,11 +41,11 @@ const Add = () => {
     const formattedDate = today.toISOString().split("T")[0];
     return formattedDate;
   }
-  console.log(getDataIsoString());
 
   const handleChange = (e) => {
     const { id, type, checked, value } = e.target;
     // setData({ ...data, [id]: type === "checkbox" ? checked : value });
+
     setData((prevData) => {
       if (id === "tel_raqam") {
         const sanitizedValue = value
@@ -63,16 +64,45 @@ const Add = () => {
     });
   };
 
+  // const handleChange = (e) => {
+  //   const { id, type, checked, value, files } = e.target;
+
+  //   setData((prevData) => {
+  //     if (id === "tel_raqam") {
+  //       const sanitizedValue = value
+  //         .replace(/\+998/, "")
+  //         .replace(/[^0-9]/g, "");
+  //       return {
+  //         ...prevData,
+  //         [id]: `+998${sanitizedValue}`,
+  //       };
+  //     } else if (type === "file") {
+  //       return {
+  //         ...prevData,
+  //         [id]: files[0],
+  //       };
+  //     } else {
+  //       return {
+  //         ...prevData,
+  //         [id]: type === "checkbox" ? checked : value,
+  //       };
+  //     }
+  //   });
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // const formData = new FormData();
+    // formData.append("image", data.material_rasmi);
 
     if (!data.ism || !data.familiya || !data.tel_raqam) {
       alert("Iltimos formani to'liq to'ldiring");
       return;
     }
     try {
-      const res = await requies.post(`mijozlar/`, data);
-      console.log(res);
+      // const res = await requies.post(`mijozlar/`, data);
+      // console.log(res);
+      await requies.post(`mijozlar/`, data);
 
       setData({
         ism: "",
@@ -107,33 +137,6 @@ const Add = () => {
       toast.error(err);
     }
   };
-
-  //       ism: "",
-  //       familiya: "",
-  //       tel_raqam: "",
-  //       kokrak_aylanasi: 0,
-  //       bel_aylanasi: 0,
-  //       uzunligi: 0,
-  //       yelka_kengligi: 0,
-  //       yelka_uzunligi: 0,
-  //       old_orqa_kengligi: 0,
-  //       bryuk_bel_aylanasi: 0,
-  //       boyi: 0,
-  //       son_aylanasi: 0,
-  //       buksa_aylanasi: 0,
-  //       oyoq_olchami: 0,
-  //       gulfik: 0,
-  //       material_nomi: "",
-  //       dizayn_nomi: "",
-  //       tikuvchiga_zoh: "",
-  //       buyurtmaning_yakuniy_sanasi: getDataIsoString(),
-  //       buyurtma_umumiy_summasi: 0,
-  //       oldindan_tolov_summasi: 0,
-  //       status: false,
-  //       aksessuar: false,
-  //       tufli: false,
-  //       galstuk: false,
-  //       babochka: false,
 
   return (
     <div className="add">
@@ -351,56 +354,85 @@ const Add = () => {
               <label className="add-dizaynLabel" htmlFor="material">
                 Material turi
               </label>
-              <div className="add-inputSvg">
-                <input
-                  type="text"
-                  placeholder="Material nomi yoki kodini yozing"
-                  className="add-inputMateral"
-                  id="material_nomi"
-                  name="material_nomi"
-                  value={data.material_nomi}
-                  onChange={handleChange}
-                />
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-                    fill="#49454F"
+
+              <div className="add-textFileUpload">
+                <div className="add-inputSvg">
+                  <input
+                    type="text"
+                    placeholder="Material nomi yoki kodini yozing"
+                    className="add-inputMateral"
+                    id="material_nomi"
+                    name="material_nomi"
+                    value={data.material_nomi}
+                    onChange={handleChange}
                   />
-                </svg>
+                </div>
+                <label
+                  className="add-inputSvg add-inputSvgPhoto"
+                  htmlFor="material_rasmi"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
+                      fill="#49454F"
+                    />
+                  </svg>
+                  <input
+                    type="file"
+                    className="add-inputMateral add-inputMateralPhoto"
+                    // id="file-upload-material_turi"
+                    id="material_rasmi"
+                    name="material_rasmi"
+                    onChange={handleChange}
+                  />
+                </label>
               </div>
             </div>
             <div className="add-dizaynLabelInput">
               <label className="add-dizaynLabel" htmlFor="dizayn">
                 Dizayni
               </label>
-              <div className="add-inputSvg">
-                <input
-                  type="text"
-                  placeholder="Dizayn turini yozing"
-                  className="add-inputMateral"
-                  id="dizayn_nomi"
-                  name="dizayn_nomi"
-                  value={data.dizayn_nomi}
-                  onChange={handleChange}
-                />
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-                    fill="#49454F"
+              <div className="add-textFileUpload">
+                <div className="add-inputSvg">
+                  <input
+                    type="text"
+                    placeholder="Dizayn turini yozing"
+                    className="add-inputMateral"
+                    id="dizayn_nomi"
+                    name="dizayn_nomi"
+                    value={data.dizayn_nomi}
+                    onChange={handleChange}
                   />
-                </svg>
+                </div>
+                <label
+                  className="add-inputSvg add-inputSvgPhoto"
+                  htmlFor="dizayn_rasm"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
+                      fill="#49454F"
+                    />
+                  </svg>
+                  <input
+                    type="file"
+                    className="add-inputMateral add-inputMateralPhoto"
+                    id="dizayn_rasm"
+                    name="dizayn_rasm"
+                  />
+                </label>
               </div>
             </div>
           </div>
