@@ -157,7 +157,9 @@ const Add = () => {
       });
       navigate("/orders");
     } catch (err) {
-      console.log(err.response.data);
+      toast.error(
+        "Error: " + err.response.status + " " + err.response.statusText
+      );
     }
   };
   // console.log(data.buyurtma_umumiy_summasi);
