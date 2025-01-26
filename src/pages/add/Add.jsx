@@ -3,6 +3,7 @@ import { useState } from "react";
 import { requies } from "../../server";
 import { useNavigate } from "react-router-dom";
 import "./Add.css";
+import { toast } from "react-toastify";
 
 const Add = () => {
   let navigate = useNavigate();
