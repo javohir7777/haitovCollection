@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+
 import { requies } from "../../server";
 import { useNavigate } from "react-router-dom";
 import "./Add.css";
@@ -156,7 +156,7 @@ const Add = () => {
       });
       navigate("/orders");
     } catch (err) {
-      toast.error(err);
+      console.log(err.response.data);
     }
   };
   // console.log(data.buyurtma_umumiy_summasi);
