@@ -29,6 +29,7 @@ const Orders = () => {
       setDate(buyurtmalar);
       setBuyurtmalarSoni(buyurtmalarSoni);
       // setSana(sana);
+      console.log(buyurtmalar);
     } catch (error) {
       console.log(error);
     }

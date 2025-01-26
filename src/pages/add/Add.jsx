@@ -33,8 +33,9 @@ const Add = () => {
     tufli: false,
     galstuk: false,
     babochka: false,
-    // material_rasmi: null,
+    material_rasmi: null,
   });
+  const [fileName, setFileName] = useState("");
 
   function getDataIsoString() {
     const today = new Date();
@@ -43,17 +44,48 @@ const Add = () => {
   }
 
   const handleChange = (e) => {
-    const { id, type, checked, value } = e.target;
-    // setData({ ...data, [id]: type === "checkbox" ? checked : value });
+    const { id, type, checked, value, files } = e.target;
 
     setData((prevData) => {
       if (id === "tel_raqam") {
         const sanitizedValue = value
           .replace(/\+998/, "")
           .replace(/[^0-9]/g, "");
+        const formattedValue = `+998 ${sanitizedValue.slice(
+          0,
+          2
+        )} ${sanitizedValue.slice(2, 5)} ${sanitizedValue.slice(
+          5,
+          7
+        )} ${sanitizedValue.slice(7)}`.trim();
         return {
           ...prevData,
-          [id]: `+998${sanitizedValue}`,
+          [id]: formattedValue,
+        };
+      } else if (
+        id === "buyurtma_umumiy_summasi" ||
+        id === "oldindan_tolov_summasi"
+      ) {
+        // Faqat raqamlarni qoldirish
+        const sanitizedValue = value.replace(/[^0-9]/g, "");
+        // 3 xonadan keyin bo'sh joy qo'shish
+        let formattedValue = sanitizedValue.replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          " "
+        );
+        // let formattedValueInt = +formattedValue.replace(" ", "");
+
+        return {
+          ...prevData,
+          [id]: formattedValue,
+        };
+      } else if (type === "file") {
+        if (files.length > 0) {
+          setFileName(files[0].name);
+        }
+        return {
+          ...prevData,
+          [id]: files[0],
         };
       } else {
         return {
@@ -64,45 +96,34 @@ const Add = () => {
     });
   };
 
-  // const handleChange = (e) => {
-  //   const { id, type, checked, value, files } = e.target;
-
-  //   setData((prevData) => {
-  //     if (id === "tel_raqam") {
-  //       const sanitizedValue = value
-  //         .replace(/\+998/, "")
-  //         .replace(/[^0-9]/g, "");
-  //       return {
-  //         ...prevData,
-  //         [id]: `+998${sanitizedValue}`,
-  //       };
-  //     } else if (type === "file") {
-  //       return {
-  //         ...prevData,
-  //         [id]: files[0],
-  //       };
-  //     } else {
-  //       return {
-  //         ...prevData,
-  //         [id]: type === "checkbox" ? checked : value,
-  //       };
-  //     }
-  //   });
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const formData = new FormData();
-    // formData.append("image", data.material_rasmi);
+    // formData.append("material_rasmi", data.material_rasmi);
+    const formData = new FormData();
+
+    // Barcha ma'lumotlarni qo'shish
+    Object.keys(data).forEach((key) => {
+      if (key === "material_rasmi" && data[key]) {
+        formData.append("image", data[key]); // Faylni qo'shish
+      } else {
+        formData.append(key, data[key]); // Oddiy maydonlarni qo'shish
+      }
+    });
 
     if (!data.ism || !data.familiya || !data.tel_raqam) {
       alert("Iltimos formani to'liq to'ldiring");
       return;
     }
     try {
-      // const res = await requies.post(`mijozlar/`, data);
-      // console.log(res);
-      await requies.post(`mijozlar/`, data);
+      // const res =
+      await requies.post(`mijozlar/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Fayllarni yuborish uchun to'g'ri header
+        },
+      });
+      // console.log(data);
+      // await requies.post(`mijozlar/`, data);
 
       setData({
         ism: "",
@@ -131,12 +152,14 @@ const Add = () => {
         tufli: false,
         galstuk: false,
         babochka: false,
+        material_rasmi: null,
       });
       navigate("/orders");
     } catch (err) {
       toast.error(err);
     }
   };
+  // console.log(data.buyurtma_umumiy_summasi);
 
   return (
     <div className="add">
@@ -367,31 +390,34 @@ const Add = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <label
-                  className="add-inputSvg add-inputSvgPhoto"
-                  htmlFor="material_rasmi"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div>
+                  <label
+                    className="add-inputSvg add-inputSvgPhoto"
+                    htmlFor="material_rasmi"
                   >
-                    <path
-                      d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-                      fill="#49454F"
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
+                        fill="#49454F"
+                      />
+                    </svg>
+                    <input
+                      type="file"
+                      className="add-inputMateral add-inputMateralPhoto"
+                      // id="file-upload-material_turi"
+                      id="material_rasmi"
+                      name="material_rasmi"
+                      onChange={handleChange}
                     />
-                  </svg>
-                  <input
-                    type="file"
-                    className="add-inputMateral add-inputMateralPhoto"
-                    // id="file-upload-material_turi"
-                    id="material_rasmi"
-                    name="material_rasmi"
-                    onChange={handleChange}
-                  />
-                </label>
+                  </label>
+                  {fileName && <span>{fileName}</span>}
+                </div>
               </div>
             </div>
             <div className="add-dizaynLabelInput">
@@ -519,7 +545,7 @@ const Add = () => {
                 Buyurtma summasi
               </label>
               <input
-                type="number"
+                type="text"
                 className="add-priceInput"
                 id="buyurtma_umumiy_summasi"
                 name="buyurtma_umumiy_summasi"
@@ -532,7 +558,7 @@ const Add = () => {
                 Oldindan to{"'"}lov
               </label>
               <input
-                type="number"
+                type="text"
                 className="add-priceInput"
                 id="oldindan_tolov_summasi"
                 name="oldindan_tolov_summasi"

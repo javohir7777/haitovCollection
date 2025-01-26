@@ -16,6 +16,9 @@ import Cookies from "js-cookie";
 export const requies = axios.create({
   baseURL: `${ENDPOINT}api`,
   timeout: 10000,
+  // headers: {
+  //   "Content-Type": "multipart/form-data",
+  // },
 });
 
 requies.interceptors.request.use(

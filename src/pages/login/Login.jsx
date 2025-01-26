@@ -52,7 +52,7 @@ const Login = ({ setIsAuth }) => {
   //   navigator("/");
   //   setIsAuth(true);
   //   localStorage.setItem("isAuth", true);
-  // };
+  // }; 
   return (
     <div className="logo">
       <div className="logo-flex">
