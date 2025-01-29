@@ -36,7 +36,6 @@ const Add = () => {
     babochka: false,
     material_rasmi: null,
   });
-  const [fileName, setFileName] = useState("");
 
   function getDataIsoString() {
     const today = new Date();
@@ -402,7 +401,6 @@ const Add = () => {
                       onChange={handleChange}
                     />
                   </label>
-                  {fileName && <span>{fileName}</span>}
                 </div>
               </div>
             </div>
