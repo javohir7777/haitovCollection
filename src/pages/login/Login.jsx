@@ -12,17 +12,8 @@ import Cookies from "js-cookie";
 const Login = ({ setIsAuth }) => {
   const navigator = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
-  // const [loading, setLoading] = useState(false);
-
-  // const [errorFields, setErrorFields] = useState({
-  //   username: false,
-  //   password: false,
-  // });
 
   const handleChange = (e) => {
-    // const { name, value } = e.target;
-    // setFormData({ ...formData, [name]: value });
-    // setErrorFields({ ...errorFields, [name]: false });
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
@@ -39,20 +30,7 @@ const Login = ({ setIsAuth }) => {
       toast.error("Error", error.message);
     }
   };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   let errors = {};
-  //   if (!formData.login) errors.username = true;
-  //   if (!formData.password) errors.password = true;
 
-  //   if (Object.keys(errors).length > 0) {
-  //     setErrorFields(errors);
-  //     return;
-  //   }
-  //   navigator("/");
-  //   setIsAuth(true);
-  //   localStorage.setItem("isAuth", true);
-  // }; 
   return (
     <div className="logo">
       <div className="logo-flex">
@@ -73,10 +51,6 @@ const Login = ({ setIsAuth }) => {
             // className={`logo-input ${errorFields.login ? "input-error" : ""}`}
           />
           <input
-            // className={`logo-input ${
-            //   errorFields.password ? "input-error" : ""
-            // }`}
-            // value={formData.password}
             name="password"
             className="logo-input"
             onChange={handleChange}

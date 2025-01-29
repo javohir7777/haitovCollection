@@ -45,7 +45,7 @@ const Add = () => {
   }
 
   const handleChange = (e) => {
-    const { id, type, checked, value, files } = e.target;
+    const { id, type, checked, value } = e.target;
 
     setData((prevData) => {
       if (id === "tel_raqam") {
@@ -63,32 +63,27 @@ const Add = () => {
           ...prevData,
           [id]: formattedValue,
         };
-      } else if (
-        id === "buyurtma_umumiy_summasi" ||
-        id === "oldindan_tolov_summasi"
-      ) {
-        // Faqat raqamlarni qoldirish
-        const sanitizedValue = value.replace(/[^0-9]/g, "");
-        // 3 xonadan keyin bo'sh joy qo'shish
-        let formattedValue = sanitizedValue.replace(
-          /\B(?=(\d{3})+(?!\d))/g,
-          " "
-        );
-        // let formattedValueInt = +formattedValue.replace(" ", "");
+      }
+      // else if (
+      //   id === "buyurtma_umumiy_summasi" ||
+      //   id === "oldindan_tolov_summasi"
+      // ) {
+      //   // Faqat raqamlarni qoldirish
+      //   const sanitizedValue = value.replace(/[^0-9]/g, "");
+      //   // 3 xonadan keyin bo'sh joy qo'shish
+      //   let formattedValue = sanitizedValue.replace(
+      //     /\B(?=(\d{3})+(?!\d))/g,
+      //     " "
+      //   );
+      //   // let formattedValueInt = formattedValue.replace(" ", "");
+      //   // console.log(formattedValue.replace(" ", ""));
 
-        return {
-          ...prevData,
-          [id]: formattedValue,
-        };
-      } else if (type === "file") {
-        if (files.length > 0) {
-          setFileName(files[0].name);
-        }
-        return {
-          ...prevData,
-          [id]: files[0],
-        };
-      } else {
+      //   return {
+      //     ...prevData,
+      //     [id]: formattedValue,
+      //   };
+      // }
+      else {
         return {
           ...prevData,
           [id]: type === "checkbox" ? checked : value,
@@ -99,18 +94,6 @@ const Add = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const formData = new FormData();
-    // formData.append("material_rasmi", data.material_rasmi);
-    const formData = new FormData();
-
-    // Barcha ma'lumotlarni qo'shish
-    Object.keys(data).forEach((key) => {
-      if (key === "material_rasmi" && data[key]) {
-        formData.append("image", data[key]); // Faylni qo'shish
-      } else {
-        formData.append(key, data[key]); // Oddiy maydonlarni qo'shish
-      }
-    });
 
     if (!data.ism || !data.familiya || !data.tel_raqam) {
       alert("Iltimos formani to'liq to'ldiring");
@@ -118,7 +101,7 @@ const Add = () => {
     }
     try {
       // const res =
-      await requies.post(`mijozlar/`, formData, {
+      await requies.post(`mijozlar/`, data, {
         headers: {
           "Content-Type": "multipart/form-data", // Fayllarni yuborish uchun to'g'ri header
         },
@@ -162,7 +145,7 @@ const Add = () => {
       );
     }
   };
-  // console.log(data.buyurtma_umumiy_summasi);
+  console.log(data.material_rasmi);
 
   return (
     <div className="add">
@@ -548,7 +531,7 @@ const Add = () => {
                 Buyurtma summasi
               </label>
               <input
-                type="text"
+                type="number"
                 className="add-priceInput"
                 id="buyurtma_umumiy_summasi"
                 name="buyurtma_umumiy_summasi"
@@ -561,7 +544,7 @@ const Add = () => {
                 Oldindan to{"'"}lov
               </label>
               <input
-                type="text"
+                type="number"
                 className="add-priceInput"
                 id="oldindan_tolov_summasi"
                 name="oldindan_tolov_summasi"
