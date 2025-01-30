@@ -276,6 +276,16 @@
   border-bottom: 3px solid var(--input-blue);
   outline: 1.5px solid var(--input-blue);
 }
+
+.add-dizaynLabelInput {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 20px;
+}
+
 @media (max-width: 1350px) {
   .add-grid {
     display: flex;

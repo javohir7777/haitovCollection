@@ -8,10 +8,12 @@ import { requies } from "../../server";
 import { toast } from "react-toastify";
 import { ACCESSTOKEN } from "../../constants";
 import Cookies from "js-cookie";
+import Loading from "../../components/loading/Loading";
 
 const Login = ({ setIsAuth }) => {
   const navigator = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -20,6 +22,7 @@ const Login = ({ setIsAuth }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const {
         data: { access },
       } = await requies.post("signin/", formData);
@@ -28,6 +31,8 @@ const Login = ({ setIsAuth }) => {
       Cookies.set(ACCESSTOKEN, access);
     } catch (error) {
       toast.error("Error", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +64,7 @@ const Login = ({ setIsAuth }) => {
             placeholder="parol"
           />
           <button className="logo-btn" type="submit" onClick={handleSubmit}>
-            <img src={login} alt="icon?" />
+            {loading ? <Loading /> : <img src={login} alt="icon?" />}
             Kirish
           </button>
         </form>

@@ -1,57 +1,189 @@
 import { useState } from "react";
 // import { requies } from "../../server";
 import "./Receipts.css";
+import axios from "axios";
+import { requies } from "../../server";
 
 const Receipts = () => {
-  // const [file, setFile] = useState({ material_rasmi: null });
-
+  // const [file, setFile] = useState(null);
+  // const [material_rasmi, setMaterial_rasmi] = useState("");
+  // // const [selected, setSelected] = useState(null);
+  // const selected = null;
   // const handleFileChange = (e) => {
   //   setFile(e.target.files[0]);
   // };
 
-  // const handleUpload = async () => {
+  // console.log(file);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // if (!file) {
+  //   //   alert("Iltimos, rasm tanlang!");
+  //   //   return;
+  //   // }
+
   //   const formData = new FormData();
-  //   formData.append("image", file);
+  //   formData.append("file", file);
+  //   formData.append("upload_preset", "javohir"); // Cloudinary upload preset
+
+  //   // try {
+  //   //   // Cloudinaryga rasm yuklash
+  //   //   const cloudinaryResponse = await axios.post(
+  //   //     `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+  //   //     formData
+  //   //   );
+
+  //   //   const cloudinaryData = cloudinaryResponse.data;
+  //   //   if (cloudinaryResponse.status === 200) {
+  //   //     setMaterial_rasmi(cloudinaryData.secure_url);
+
+  //   //     // Backendga rasm URL manzilini yuborish
+  //   //     const backendResponse = await requies.post("mijozlar/", {
+  //   //       ism: "Javohir",
+  //   //       tel_raqam: "+998 99 678 67 62",
+  //   //       material_rasmi: cloudinaryData.secure_url,
+  //   //     });
+
+  //   //     if (backendResponse.status === 200) {
+  //   //       alert("Rasm muvaffaqiyatli yuklandi va backendga yuborildi!");
+  //   //     } else {
+  //   //       alert("Rasm backendga yuborishda xatolik yuz berdi.");
+  //   //     }
+  //   //   } else {
+  //   //     alert("Rasm yuklashda xatolik yuz berdi.");
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error("Xatolik:", error);
+  //   // }
 
   //   try {
-  //     const response = await requies.post("upload", formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-  //     console.log("Upload successful:", response.data);
+  //     if (selected !== file) {
+  //       // Cloudinary'ga fayl yuklash
+  //       const cloudinaryResponse = await axios.post(
+  //         `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+  //         formData
+  //       );
+
+  //       // Rasm URL'ni olish
+  //       const imageUrl = cloudinaryResponse.data.secure_url;
+  //       setMaterial_rasmi(imageUrl);
+
+  //       // Backendga ma'lumot yuborish
+  //       await requies.post("mijozlar/", {
+  //         ism: "Javohir",
+  //         tel_raqam: "+998 99 678 67 62",
+  //         material_rasmi: imageUrl,
+  //       });
+
+  //       console.log("Muvaffaqiyatli yuklandi:", imageUrl);
+  //     } else {
+  //       await requies.post("mijozlar/", {
+  //         ism: "Javohir",
+  //         tel_raqam: "+998 99 678 67 62",
+  //       });
+  //     }
   //   } catch (error) {
-  //     console.error("Upload failed:", error);
+  //     console.error("Xatolik:", error);
   //   }
   // };
-  const [fileName, setFileName] = useState("");
 
+  const [files, setFiles] = useState({
+    buyurtma_rasmi: null,
+    dizayn_rasmi: null,
+  });
+  const [uploadedUrls, setUploadedUrls] = useState({
+    buyurtma_rasmi: "",
+    dizayn_rasmi: "",
+  });
+
+  // Input fayllarini olish
   const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
+    const { name, files } = e.target;
+    setFiles((prev) => ({ ...prev, [name]: files[0] }));
+  };
+
+  // Rasm yuklash funksiyasi
+  const uploadToCloudinary = async (file) => {
+    if (!file) return null;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "javohir"); // Cloudinary'dagi preset nomi
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+        formData
+      );
+
+      return res.data.secure_url;
+    } catch (error) {
+      console.error("Cloudinary yuklash xatosi:", error);
+      return null;
     }
   };
-  console.log(fileName);
+
+  // Formni jo‘natish
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Har ikkala rasmni yuklash
+      const buyurtmaUrl = await uploadToCloudinary(files.buyurtma_rasmi);
+      const dizaynUrl = await uploadToCloudinary(files.dizayn_rasmi);
+
+      // Yuklangan rasmlar URL'larini state-ga saqlash
+      setUploadedUrls({ buyurtma_rasmi: buyurtmaUrl, dizayn_rasmi: dizaynUrl });
+
+      // Backendga ma’lumot yuborish
+      await requies.post("mijozlar/", {
+        ism: "Javohir",
+        tel_raqam: "+998 99 678 67 62",
+        buyurtma_umumiy_summasi: "4 500 000",
+        oldindan_tolov_summasi: "2 000 000",
+        material_rasmi: buyurtmaUrl || "", // Agar rasm yuklanmagan bo‘lsa, bo‘sh string bo‘ladi
+        dizayn_rasmi: dizaynUrl || "",
+      });
+
+      console.log("Muvaffaqiyatli yuklandi:", { buyurtmaUrl, dizaynUrl });
+    } catch (error) {
+      console.error("Xatolik:", error);
+    }
+  };
 
   return (
-    <div className="upload-container">
-      <label htmlFor="file-upload" className="custom-file-upload">
-        <svg
-          className="file-svg"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-            fill="#49454F"
+    // <div>
+    //   <form onSubmit={handleSubmit}>
+    //     <input type="file" onChange={handleFileChange} />
+    //     <button type="submit">Yuklash</button>
+    //   </form>
+    //   {material_rasmi && (
+    //     <div>
+    //       <h3>Yuklangan Rasm:</h3>
+
+    //       <img src={material_rasmi} alt="Uploaded" style={{ width: "300px" }} />
+    //     </div>
+    //   )}
+    // </div>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input type="file" name="buyurtma_rasmi" onChange={handleFileChange} />
+        {uploadedUrls.buyurtma_rasmi && (
+          <img
+            src={uploadedUrls.buyurtma_rasmi}
+            alt="Buyurtma rasmi"
+            width="100"
           />
-        </svg>
-      </label>
-      <input id="file-upload" type="file" onChange={handleFileChange} />
-      {fileName && <p>Uploaded file: {fileName}</p>}
+        )}
+
+        <input type="file" name="dizayn_rasmi" onChange={handleFileChange} />
+        {uploadedUrls.dizayn_rasmi && (
+          <img src={uploadedUrls.dizayn_rasmi} alt="Dizayn rasmi" width="100" />
+        )}
+
+        <button type="submit">Yuklash</button>
+      </form>
     </div>
   );
 };

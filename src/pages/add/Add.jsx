@@ -2,9 +2,11 @@ import { useState } from "react";
 
 import { requies } from "../../server";
 import { useNavigate } from "react-router-dom";
-import "./Add.css";
 import { toast } from "react-toastify";
+import axios from "axios";
 
+import "./Add.css";
+import Loading from "../../components/loading/Loading";
 const Add = () => {
   let navigate = useNavigate();
   const [data, setData] = useState({
@@ -35,7 +37,13 @@ const Add = () => {
     galstuk: false,
     babochka: false,
     material_rasmi: null,
+    dizayn_rasmi: null,
   });
+  const [loading, setLoading] = useState(false);
+  // const [uploadedUrls, setUploadedUrls] = useState({
+  //   buyurtma_rasmi: "",
+  //   dizayn_rasmi: "",
+  // });
 
   function getDataIsoString() {
     const today = new Date();
@@ -44,7 +52,7 @@ const Add = () => {
   }
 
   const handleChange = (e) => {
-    const { id, type, checked, value } = e.target;
+    const { id, type, checked, value, files } = e.target;
 
     setData((prevData) => {
       if (id === "tel_raqam") {
@@ -62,33 +70,57 @@ const Add = () => {
           ...prevData,
           [id]: formattedValue,
         };
-      }
-      // else if (
-      //   id === "buyurtma_umumiy_summasi" ||
-      //   id === "oldindan_tolov_summasi"
-      // ) {
-      //   // Faqat raqamlarni qoldirish
-      //   const sanitizedValue = value.replace(/[^0-9]/g, "");
-      //   // 3 xonadan keyin bo'sh joy qo'shish
-      //   let formattedValue = sanitizedValue.replace(
-      //     /\B(?=(\d{3})+(?!\d))/g,
-      //     " "
-      //   );
-      //   // let formattedValueInt = formattedValue.replace(" ", "");
-      //   // console.log(formattedValue.replace(" ", ""));
+      } else if (
+        id === "buyurtma_umumiy_summasi" ||
+        id === "oldindan_tolov_summasi"
+      ) {
+        // Faqat raqamlarni qoldirish
+        const sanitizedValue = value.replace(/[^0-9]/g, "");
+        // 3 xonadan keyin bo'sh joy qo'shish
+        let formattedValue = sanitizedValue.replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          " "
+        );
+        // let formattedValueInt = formattedValue.replace(" ", "");
+        // console.log(formattedValue.replace(" ", ""));
 
-      //   return {
-      //     ...prevData,
-      //     [id]: formattedValue,
-      //   };
-      // }
-      else {
+        return {
+          ...prevData,
+          [id]: formattedValue,
+        };
+      } else if (type === "file") {
+        return {
+          ...prevData,
+          [id]: files[0],
+        };
+      } else {
         return {
           ...prevData,
           [id]: type === "checkbox" ? checked : value,
         };
       }
     });
+  };
+
+  // Rasm yuklash funksiyasi
+  const uploadToCloudinary = async (file) => {
+    if (!file) return null;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "javohir"); // Cloudinary'dagi preset nomi
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+        formData
+      );
+
+      return res.data.secure_url;
+    } catch (error) {
+      console.error("Cloudinary yuklash xatosi:", error);
+      return null;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -99,14 +131,15 @@ const Add = () => {
       return;
     }
     try {
-      // const res =
-      await requies.post(`mijozlar/`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Fayllarni yuborish uchun to'g'ri header
-        },
+      setLoading(true);
+      const buyurtmaUrl = await uploadToCloudinary(data.material_rasmi);
+      const dizaynUrl = await uploadToCloudinary(data.dizayn_rasmi);
+
+      await requies.post(`mijozlar/`, {
+        ...data,
+        material_rasmi: buyurtmaUrl || "",
+        dizayn_rasmi: dizaynUrl || "",
       });
-      // console.log(data);
-      // await requies.post(`mijozlar/`, data);
 
       setData({
         ism: "",
@@ -136,15 +169,17 @@ const Add = () => {
         galstuk: false,
         babochka: false,
         material_rasmi: null,
+        dizayn_rasmi: null,
       });
       navigate("/orders");
     } catch (err) {
       toast.error(
         "Error: " + err.response.status + " " + err.response.statusText
       );
+    } finally {
+      setLoading(false);
     }
   };
-  console.log(data.material_rasmi);
 
   return (
     <div className="add">
@@ -395,7 +430,6 @@ const Add = () => {
                     <input
                       type="file"
                       className="add-inputMateral add-inputMateralPhoto"
-                      // id="file-upload-material_turi"
                       id="material_rasmi"
                       name="material_rasmi"
                       onChange={handleChange}
@@ -422,7 +456,7 @@ const Add = () => {
                 </div>
                 <label
                   className="add-inputSvg add-inputSvgPhoto"
-                  htmlFor="dizayn_rasm"
+                  htmlFor="dizayn_rasmi"
                 >
                   <svg
                     width="16"
@@ -439,8 +473,9 @@ const Add = () => {
                   <input
                     type="file"
                     className="add-inputMateral add-inputMateralPhoto"
-                    id="dizayn_rasm"
-                    name="dizayn_rasm"
+                    id="dizayn_rasmi"
+                    name="dizayn_rasmi"
+                    onChange={handleChange}
                   />
                 </label>
               </div>
@@ -529,7 +564,7 @@ const Add = () => {
                 Buyurtma summasi
               </label>
               <input
-                type="number"
+                type="text"
                 className="add-priceInput"
                 id="buyurtma_umumiy_summasi"
                 name="buyurtma_umumiy_summasi"
@@ -542,7 +577,7 @@ const Add = () => {
                 Oldindan to{"'"}lov
               </label>
               <input
-                type="number"
+                type="text"
                 className="add-priceInput"
                 id="oldindan_tolov_summasi"
                 name="oldindan_tolov_summasi"
@@ -556,7 +591,7 @@ const Add = () => {
               // onClick={resetData}
               className="add-deleteAdd"
             >
-              <button className="svgDelete">
+              {/* <button className="svgDelete">
                 <svg
                   width="20"
                   height="20"
@@ -571,20 +606,24 @@ const Add = () => {
                 </svg>
 
                 <span className="svgDelete-span">O{"'"}chirish</span>
-              </button>
+              </button> */}
               <button className="svgAdd" type="submit">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11 17H13V13H17V11H13V7H11V11H7V13H11V17ZM12 22C10.6167 22 9.31667 21.7417 8.1 21.225C6.88333 20.6917 5.825 19.975 4.925 19.075C4.025 18.175 3.30833 17.1167 2.775 15.9C2.25833 14.6833 2 13.3833 2 12C2 10.6167 2.25833 9.31667 2.775 8.1C3.30833 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.31667 8.1 2.8C9.31667 2.26667 10.6167 2 12 2C13.3833 2 14.6833 2.26667 15.9 2.8C17.1167 3.31667 18.175 4.025 19.075 4.925C19.975 5.825 20.6833 6.88333 21.2 8.1C21.7333 9.31667 22 10.6167 22 12C22 13.3833 21.7333 14.6833 21.2 15.9C20.6833 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6917 15.9 21.225C14.6833 21.7417 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"
-                    fill="#2D4E30"
-                  />
-                </svg>
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 17H13V13H17V11H13V7H11V11H7V13H11V17ZM12 22C10.6167 22 9.31667 21.7417 8.1 21.225C6.88333 20.6917 5.825 19.975 4.925 19.075C4.025 18.175 3.30833 17.1167 2.775 15.9C2.25833 14.6833 2 13.3833 2 12C2 10.6167 2.25833 9.31667 2.775 8.1C3.30833 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.31667 8.1 2.8C9.31667 2.26667 10.6167 2 12 2C13.3833 2 14.6833 2.26667 15.9 2.8C17.1167 3.31667 18.175 4.025 19.075 4.925C19.975 5.825 20.6833 6.88333 21.2 8.1C21.7333 9.31667 22 10.6167 22 12C22 13.3833 21.7333 14.6833 21.2 15.9C20.6833 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6917 15.9 21.225C14.6833 21.7417 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"
+                      fill="#2D4E30"
+                    />
+                  </svg>
+                )}
 
                 <span className="svgAdd-span">Saqlash</span>
               </button>
