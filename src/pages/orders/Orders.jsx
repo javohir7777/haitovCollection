@@ -29,7 +29,6 @@ const Orders = () => {
       setDate(buyurtmalar);
       setBuyurtmalarSoni(buyurtmalarSoni);
       // setSana(sana);
-      console.log(buyurtmalar);
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +45,6 @@ const Orders = () => {
   };
 
   const toggleStatus = async (id, status) => {
-    console.log(id, status);
     try {
       const conStatus = confirm("Bajarilsinmi");
       conStatus &&

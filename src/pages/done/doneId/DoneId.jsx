@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { requies } from "../../../server";
 import Loading from "../../../components/loading/Loading";
+import axios from "axios";
 
 const DoneId = () => {
   let navigate = useNavigate();
@@ -33,10 +34,11 @@ const DoneId = () => {
     tufli: false,
     galstuk: false,
     babochka: false,
-    material_rasmi: null,
-    dizayn_rasmi: null,
+    material_rasmi: "",
+    dizayn_rasmi: "",
   });
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -114,12 +116,65 @@ const DoneId = () => {
     });
   };
 
+  const handleMaterialRasmChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "javohir");
+
+    try {
+      setLoading(true);
+      const cloudinaryResponse = await axios.post(
+        `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+        formData
+      );
+      const imageUrl = cloudinaryResponse.data.secure_url;
+
+      setData({
+        ...data,
+        material_rasmi: imageUrl,
+      });
+    } catch (error) {
+      console.error("Material rasm yuklashda xatolik:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDizaynRasmChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "javohir");
+
+    try {
+      setLoading1(true);
+      const cloudinaryResponse = await axios.post(
+        `https://api.cloudinary.com/v1_1/dcoj8otis/image/upload`,
+        formData
+      );
+      const imageUrl = cloudinaryResponse.data.secure_url;
+
+      setData({
+        ...data,
+        dizayn_rasmi: imageUrl,
+      });
+    } catch (error) {
+      console.error("Dizayn rasm yuklashda xatolik:", error);
+    } finally {
+      setLoading1(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await requies.put(`mijozlar/${id}/update/`, data);
-      console.log(res);
+      await requies.put(`mijozlar/${id}/update/`, data);
 
       navigate("/orders");
     } catch (err) {
@@ -378,12 +433,26 @@ const DoneId = () => {
                       className="add-inputMateral add-inputMateralPhoto"
                       id="material_rasmi"
                       name="material_rasmi"
-                      onChange={handleChange}
+                      onChange={handleMaterialRasmChange}
                     />
                   </label>
                 </div>
               </div>
-              <img src={data.material_rasmi} alt="" width="100" />
+              <div
+                style={{
+                  width: "100px",
+                  height: "135px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <img src={data.material_rasmi} alt="" width="100" />
+                )}
+              </div>
             </div>
             <div className="add-dizaynLabelInput">
               <label className="add-dizaynLabel" htmlFor="dizayn">
@@ -423,11 +492,25 @@ const DoneId = () => {
                     className="add-inputMateral add-inputMateralPhoto"
                     id="dizayn_rasmi"
                     name="dizayn_rasmi"
-                    onChange={handleChange}
+                    onChange={handleDizaynRasmChange}
                   />
                 </label>
               </div>
-              <img src={data.dizayn_rasmi} alt="" width="100" />
+              <div
+                style={{
+                  width: "100px",
+                  height: "135px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {loading1 ? (
+                  <Loading />
+                ) : (
+                  <img src={data.dizayn_rasmi} alt="" width="100" />
+                )}
+              </div>
             </div>
           </div>
           <div className="add-textGrid">
