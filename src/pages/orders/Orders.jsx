@@ -33,7 +33,6 @@ const Orders = () => {
       console.log(error);
     }
   };
-  console.log(buyurtmalarSoni);
 
   useEffect(() => {
     getData();
