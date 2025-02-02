@@ -24,15 +24,16 @@ const Orders = () => {
   const getData = async () => {
     try {
       const {
-        data: { buyurtmalar, buyurtmalarSoni },
+        data: { buyurtmalar, buyurtmalar_soni },
       } = await requies.get(`mijozlar/kunlik-buyurtmalar?date=${data}`);
       setDate(buyurtmalar);
-      setBuyurtmalarSoni(buyurtmalarSoni);
+      setBuyurtmalarSoni(buyurtmalar_soni);
       // setSana(sana);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(buyurtmalarSoni);
 
   useEffect(() => {
     getData();
