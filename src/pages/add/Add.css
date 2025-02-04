@@ -285,6 +285,15 @@
   align-items: center;
   gap: 20px;
 }
+.label-Dz {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 40px;
+  white-space: nowrap;
+}
 
 @media (max-width: 1350px) {
   .add-grid {

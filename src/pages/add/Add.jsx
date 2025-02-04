@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-import "./Add.css";
 import Loading from "../../components/loading/Loading";
+import "./Add.css";
 const Add = () => {
   let navigate = useNavigate();
   const [data, setData] = useState({
@@ -40,6 +40,9 @@ const Add = () => {
     dizayn_rasmi: null,
   });
   const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const [fileNameDz, setFileNameDz] = useState("");
+
   // const [uploadedUrls, setUploadedUrls] = useState({
   //   buyurtma_rasmi: "",
   //   dizayn_rasmi: "",
@@ -89,6 +92,11 @@ const Add = () => {
           [id]: formattedValue,
         };
       } else if (type === "file") {
+        if (id === "material_rasmi") {
+          setFileName(files[0].name);
+        } else if (id === "dizayn_rasmi") {
+          setFileNameDz(files[0].name);
+        }
         return {
           ...prevData,
           [id]: files[0],
@@ -411,30 +419,33 @@ const Add = () => {
                   />
                 </div>
                 <div>
-                  <label
-                    className="add-inputSvg add-inputSvgPhoto"
-                    htmlFor="material_rasmi"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="label-Dz">
+                    <label
+                      className="add-inputSvg add-inputSvgPhoto"
+                      htmlFor="material_rasmi"
                     >
-                      <path
-                        d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-                        fill="#49454F"
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
+                          fill="#49454F"
+                        />
+                      </svg>
+                      <input
+                        type="file"
+                        className="add-inputMateral add-inputMateralPhoto"
+                        id="material_rasmi"
+                        name="material_rasmi"
+                        onChange={handleChange}
                       />
-                    </svg>
-                    <input
-                      type="file"
-                      className="add-inputMateral add-inputMateralPhoto"
-                      id="material_rasmi"
-                      name="material_rasmi"
-                      onChange={handleChange}
-                    />
-                  </label>
+                    </label>
+                    {fileName && <marquee>{fileName}</marquee>}
+                  </div>
                 </div>
               </div>
             </div>
@@ -454,30 +465,33 @@ const Add = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <label
-                  className="add-inputSvg add-inputSvgPhoto"
-                  htmlFor="dizayn_rasmi"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div className="label-Dz">
+                  <label
+                    className="add-inputSvg add-inputSvgPhoto"
+                    htmlFor="dizayn_rasmi"
                   >
-                    <path
-                      d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
-                      fill="#49454F"
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7ZM2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V11H2V14H14V11H16V14C16 14.55 15.8042 15.0208 15.4125 15.4125C15.0208 15.8042 14.55 16 14 16H2Z"
+                        fill="#49454F"
+                      />
+                    </svg>
+                    <input
+                      type="file"
+                      className="add-inputMateral add-inputMateralPhoto"
+                      id="dizayn_rasmi"
+                      name="dizayn_rasmi"
+                      onChange={handleChange}
                     />
-                  </svg>
-                  <input
-                    type="file"
-                    className="add-inputMateral add-inputMateralPhoto"
-                    id="dizayn_rasmi"
-                    name="dizayn_rasmi"
-                    onChange={handleChange}
-                  />
-                </label>
+                  </label>
+                  {fileNameDz && <marquee>{fileNameDz}</marquee>}
+                </div>
               </div>
             </div>
           </div>
