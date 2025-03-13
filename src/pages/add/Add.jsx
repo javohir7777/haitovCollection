@@ -43,11 +43,6 @@ const Add = () => {
   const [fileName, setFileName] = useState("");
   const [fileNameDz, setFileNameDz] = useState("");
 
-  // const [uploadedUrls, setUploadedUrls] = useState({
-  //   buyurtma_rasmi: "",
-  //   dizayn_rasmi: "",
-  // });
-
   function getDataIsoString() {
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
@@ -84,8 +79,6 @@ const Add = () => {
           /\B(?=(\d{3})+(?!\d))/g,
           " "
         );
-        // let formattedValueInt = formattedValue.replace(" ", "");
-        // console.log(formattedValue.replace(" ", ""));
 
         return {
           ...prevData,
@@ -134,10 +127,11 @@ const Add = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!data.ism || !data.familiya || !data.tel_raqam) {
-      alert("Iltimos formani to'liq to'ldiring");
-      return;
-    }
+    // if (!data.ism || !data.familiya || !data.tel_raqam) {
+    //   alert("Iltimos formani to'liq to'ldiring");
+    //   return;
+    // }
+
     try {
       setLoading(true);
       const buyurtmaUrl = await uploadToCloudinary(data.material_rasmi);
@@ -149,36 +143,36 @@ const Add = () => {
         dizayn_rasmi: dizaynUrl || "",
       });
 
-      setData({
-        ism: "",
-        familiya: "",
-        tel_raqam: "+998",
-        kokrak_aylanasi: "",
-        bel_aylanasi: "",
-        uzunligi: "",
-        yelka_kengligi: "",
-        yelka_uzunligi: "",
-        old_orqa_kengligi: "",
-        bryuk_bel_aylanasi: "",
-        boyi: "",
-        son_aylanasi: "",
-        buksa_aylanasi: "",
-        oyoq_olchami: "",
-        gulfik: "",
-        material_nomi: "",
-        dizayn_nomi: "",
-        tikuvchiga_zoh: "",
-        buyurtmaning_yakuniy_sanasi: getDataIsoString(),
-        buyurtma_umumiy_summasi: "",
-        oldindan_tolov_summasi: "",
-        status: false,
-        aksessuar: false,
-        tufli: false,
-        galstuk: false,
-        babochka: false,
-        material_rasmi: null,
-        dizayn_rasmi: null,
-      });
+      // setData({
+      //   ism: "",
+      //   familiya: "",
+      //   tel_raqam: "+998",
+      //   kokrak_aylanasi: "",
+      //   bel_aylanasi: "",
+      //   uzunligi: "",
+      //   yelka_kengligi: "",
+      //   yelka_uzunligi: "",
+      //   old_orqa_kengligi: "",
+      //   bryuk_bel_aylanasi: "",
+      //   boyi: "",
+      //   son_aylanasi: "",
+      //   buksa_aylanasi: "",
+      //   oyoq_olchami: "",
+      //   gulfik: "",
+      //   material_nomi: "",
+      //   dizayn_nomi: "",
+      //   tikuvchiga_zoh: "",
+      //   buyurtmaning_yakuniy_sanasi: getDataIsoString(),
+      //   buyurtma_umumiy_summasi: "",
+      //   oldindan_tolov_summasi: "",
+      //   status: false,
+      //   aksessuar: false,
+      //   tufli: false,
+      //   galstuk: false,
+      //   babochka: false,
+      //   material_rasmi: null,
+      //   dizayn_rasmi: null,
+      // });
       navigate("/orders");
     } catch (err) {
       toast.error(
@@ -196,7 +190,7 @@ const Add = () => {
         <div className="add-grid">
           <div className="addLabelInput">
             <label className="add-label" htmlFor="firstName">
-              Ism
+              Ism*
             </label>
             <input
               className="add-input"
@@ -205,11 +199,12 @@ const Add = () => {
               name="ism"
               value={data.ism}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="lastName">
-              Familiya
+              Familiya*
             </label>
             <input
               className="add-input"
@@ -218,11 +213,12 @@ const Add = () => {
               name="familiya"
               value={data.familiya}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="mobile">
-              Telefon raqami
+              Telefon raqami*
             </label>
             <input
               className="add-input"
@@ -232,6 +228,7 @@ const Add = () => {
               name="tel_raqam"
               value={data.tel_raqam}
               onChange={handleChange}
+              required
               // value={`+998${data.tel_raqam}`}
             />
           </div>
@@ -561,7 +558,7 @@ const Add = () => {
             <div className="add-dateInput">
               <div className="date">
                 <label htmlFor="date" className="date-label">
-                  Buyurmaning yakuniy sanasi
+                  Buyurmaning yakuniy sanasi*
                 </label>
                 <input
                   type="date"
@@ -570,12 +567,13 @@ const Add = () => {
                   name="buyurtmaning_yakuniy_sanasi"
                   value={data.buyurtmaning_yakuniy_sanasi}
                   onChange={handleChange}
+                  required
                 />
               </div>
             </div>
             <div className="add-price">
               <label htmlFor="sum" className="add-priceLabel">
-                Buyurtma summasi
+                Buyurtma summasi*
               </label>
               <input
                 type="text"
@@ -584,11 +582,12 @@ const Add = () => {
                 name="buyurtma_umumiy_summasi"
                 value={data.buyurtma_umumiy_summasi}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="add-price">
               <label htmlFor="payment" className="add-priceLabel">
-                Oldindan to{"'"}lov
+                Oldindan to{"'"}lov*
               </label>
               <input
                 type="text"
@@ -597,6 +596,7 @@ const Add = () => {
                 name="oldindan_tolov_summasi"
                 value={data.oldindan_tolov_summasi}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
