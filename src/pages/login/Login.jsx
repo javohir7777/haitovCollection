@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { ACCESSTOKEN } from "../../constants";
 import Cookies from "js-cookie";
 import Loading from "../../components/loading/Loading";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Login = ({ setIsAuth }) => {
   const navigator = useNavigate();
@@ -39,21 +40,21 @@ const Login = ({ setIsAuth }) => {
   return (
     <div className="logo">
       <div className="logo-flex">
-        <img className="logo-brand__img" src={brandLogo} alt="logo?" />
+        <LazyLoadImage
+          alt="logo?"
+          effect="blur"
+          className="logo-brand__img"
+          src={brandLogo}
+        />
         <h2 className="logo--h2">Kirish</h2>
-        <form
-          className="form-login"
-          // onSubmit={handleSubmit}
-        >
+        <form className="form-login">
           <input
-            // value={formData.login}
             name="username"
             className="logo-input"
             id="username"
             onChange={handleChange}
             type="text"
             placeholder="username"
-            // className={`logo-input ${errorFields.login ? "input-error" : ""}`}
           />
           <input
             name="password"
