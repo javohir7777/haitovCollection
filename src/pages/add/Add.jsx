@@ -289,7 +289,7 @@ const Add = () => {
           </div>
           <div className="addLabelInput">
             <label className="add-label" htmlFor="shoulderLength">
-              Yelka uzunligi
+              Yeng uzunligi
             </label>
             <input
               className="add-input"
